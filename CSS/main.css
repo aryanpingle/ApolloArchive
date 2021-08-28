@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+@font-face {
+    font-family: Horizon;
+    src: url(../Fonts/Horizon.woff2) format('woff2')
+}
+
+:root {
+    font-family: 'Horizon';
+    color: white;
+}
+
+* {
+    box-sizing: border-box;
+    font-size: 60px;
+}
+
+body {
+    background: url(../Images/Background\ -\ Centered.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#low-res-bkg, #high-res-bkg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
