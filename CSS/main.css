@@ -23,6 +23,14 @@ body {
     background-color: black;
 }
 
+#low-res-bkg {
+    filter: blur(4px) brightness(0.75)
+}
+
+#high-res-bkg {
+    filter: brightness(0.75)
+}
+
 #low-res-bkg, #high-res-bkg {
     position: absolute;
     height: 100%;
@@ -32,6 +40,4 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-
-    filter: brightness(0.75);
 }
