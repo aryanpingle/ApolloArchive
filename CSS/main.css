@@ -24,7 +24,7 @@ body {
 }
 
 #low-res-bkg {
-    filter: blur(4px) brightness(0.75)
+    filter: blur(2px) brightness(0.75)
 }
 
 #high-res-bkg {
