@@ -36,4 +36,6 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+
+    filter: brightness(0.75);
 }

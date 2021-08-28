@@ -5,17 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon Unofficial Site</title>
-
+    
     <!-- CSS -->
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/index.css">
+    
+    <!-- Script: Random Title Screen -->
 </head>
 <body>
-    <div id="low-res-bkg" style="background-image: url(Images/Title\ Screen\ -\ Low\ Res.jpg);" alt=""></div>
+    <div id="low-res-bkg" alt=""></div>
+    <script>
+        document.getElementById("low-res-bkg").style="background-image: url(Images/Title%20Screen%20"+parseInt(1+Math.random()*4)+"%20-%20Low%20Res.jpg);"
+    </script>
     <div id="high-res-bkg" alt=""></div>
     <audio autoplay>unable</audio>
     <img src="Images/Logo.png" alt="">
-
+    
     <!-- Scripts -->
     <script src="JS/main.js"></script>
     <script src="JS/index.js"></script>
