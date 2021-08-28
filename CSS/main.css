@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: Horizon;
-    src: url(../Fonts/Horizon.woff2) format('woff2')
+    src: url(../Fonts/Horizon.woff2) format('woff2');
 }
 
 :root {
