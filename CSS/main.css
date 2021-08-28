@@ -16,15 +16,11 @@
 }
 
 body {
-    background: url(../Images/Background\ -\ Centered.png);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
+    background-color: black;
 }
 
 #low-res-bkg, #high-res-bkg {
