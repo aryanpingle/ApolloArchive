@@ -1,6 +1,6 @@
 from PIL import Image
 
-perc = 5
+perc = 1
 
 for i in range(1, 5):
     url = f"Images/Title Screen {i}.jpg"
