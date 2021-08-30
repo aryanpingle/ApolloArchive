@@ -9,8 +9,6 @@
     <!-- CSS -->
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/index.css">
-    
-    <!-- Script: Random Title Screen -->
 </head>
 <body>
     <div id="low-res-bkg" alt=""></div>
@@ -18,8 +16,7 @@
         document.getElementById("low-res-bkg").style="background-image: url(Images/Title%20Screen%20"+parseInt(1+Math.random()*4)+"%20-%20Low%20Res.jpg);"
     </script>
     <div id="high-res-bkg" alt=""></div>
-    <audio autoplay>unable</audio>
-    <img src="Images/Logo.png" alt="">
+    <img src="Images/Logo.png" alt="" onclick="window.location.href = 'Datapoints.html'">
     
     <!-- Scripts -->
     <script src="JS/main.js"></script>
