@@ -1,12 +1,7 @@
 from PIL import Image
 
-perc = 1
+img = Image.open("Images/favicon.png")
 
-for i in range(1, 5):
-    url = f"Images/Title Screen {i}.jpg"
-    img = Image.open(url)
-    w,h = img.width, img.height
+img = img.resize((64, 64))
 
-    img = img.resize((int(w * perc / 100), int(h * perc / 100)))
-
-    img.save(url.replace(".", " - Low Res."))
+img.save("Images/favicon.ico", "ICO")
