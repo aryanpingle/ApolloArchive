@@ -4,12 +4,28 @@ const get_params = ()=>{
     return url.indexOf("?")==-1?[""]:url.substr(url.indexOf("?")+1).split("&")
 }
 const gid = id_name=>document.getElementById(id_name)
+const sum = (list, lambda=e=>e)=>list.reduce((acc,val)=>acc+lambda(val), 0)
 
-window.onload = function setup() {
+var mobile_mode = true;
+
+function setup_main() {
+    if(window.innerWidth >= 1024) {
+        mobile_mode = false;
+    }
     set_mobile_nav_delays()
     set_mobile_links()
     setup_key_presses()
     setup_navigation_buttons()
+}
+
+/**
+ * Rechecks whether this is a mobile mode or not
+ */
+
+function resize_handler_main() {
+    if(window.innerWidth >= 1024) {
+        mobile_mode = false;
+    }
 }
 
 // Mobile Values
@@ -79,5 +95,4 @@ function setup_key_presses() {
 function setup_navigation_buttons() {
     gid("navigate-left").onclick = go_to_previous_page
     gid("navigate-right").onclick = go_to_next_page
-
 }

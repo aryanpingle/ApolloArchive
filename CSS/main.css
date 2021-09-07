@@ -1,12 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap');
 
 @font-face {
     font-family: Horizon;
     src: url(../Fonts/Horizon.woff2) format('woff2');
 }
 
+::selection {
+    background-color: orange;
+}
+
 :root {
     --steel-blue: hsl(180, 13%, 62%);
+    --selection-yellow: rgb(255, 255, 160);
     font-family: 'Horizon';
     color: white;
 }
@@ -149,7 +155,7 @@ nav#mobile-nav > .nav-body {
 }
 
 .nav-body > .current {
-    color: rgb(255, 255, 160);
+    color: var(--selection-yellow);
 }
 
 .nav-expanded #mobile-nav .nav-body > * {
@@ -196,6 +202,12 @@ nav#desktop-nav {
     display: none;
 }
 
+/* Hide the desktop control bar */
+
+.controls-container {
+    display: none;
+}
+
 @media (min-width: 1024px) {
     nav#mobile-nav {
         display: none;
@@ -213,7 +225,7 @@ nav#desktop-nav {
 
     nav#desktop-nav {
         display: block;
-        height: 10vh;
+        height: 15vh;
         width: 100%;
         /* background-color: #ffffff88; */
 
@@ -272,6 +284,56 @@ nav#desktop-nav {
     }
 
     #page > #page-content {
-        height: 90vh;
+        height: 75vh;
     }
+
+    #page > .controls-container {
+        padding: 0 10%;
+        height: 10vh;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        /* background-color: rgba(255, 255, 255, 0.5); */
+    }
+
+    .controls-container > * {
+        font-size: 2em;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        transition: color 150ms ease;
+    }
+
+    .controls-container > *:hover {
+        color: rgb(255, 255, 160)
+    }
+
+    .controls-container .control-key {
+        color: black;
+        font-size: 0.75em;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 0 0.5em;
+        border-radius: 5px;
+        box-shadow: 0 5px rgba(255, 255, 255, 0.2);
+        transition: color 150ms ease;
+    }
+
+    /* #navigate-left, #navigate-right {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: black;
+        font-size: 0.5em;
+        padding: 0 0.5em;
+        border-radius: 5px;
+        box-shadow: 0 5px rgba(255, 255, 255, 0.2);
+        transition: color 150ms ease;
+    }
+
+    :is(#navigate-left, #navigate-right):hover {
+        color: rgb(255, 255, 160)
+    } */
 }

@@ -7,45 +7,41 @@
     <title>Bkg shit</title>
 
     <style>
-        *::-webkit-scrollbar {
-            display: none;
-        }
         * {
             box-sizing: border-box;
         }
+
         body {
             margin: 0;
             padding: 0;
             background-color: black;
-            background: url(Images/Background.png);
             position: relative;
         }
 
         div {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
+            inset: 0;
+            width: 400px;
+            height: 380px;
 
-        img {
-            height: 100vh;
-            width: 100vw;
-        }
-
-        #d2 {
-            height: calc(100vh - 20px);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            mix-blend-mode: darken;
         }
     </style>
 </head>
 <body>
-    <div id="d1">
-        <img id="i1" src="Screenshots/HZD_game_version.jpg" alt="" />
-    </div>
-    <div id="d2">
-        <img id="i2" src="Screenshots/Horizon Zero Dawn_ Complete Edition 28-08-2021 01_35_05.png" alt="" />
-    </div>
+    <img src="Images/DatapointBackground-Transparent.png" alt="">
+    <!-- <div style="background-image: url(Images/Ridgewood-Icon.png);"></div>
+    <div style="background-image: url(Images/Fast_Travel_Pack_Icon.png);"></div>
+    <div style="background-image: url(Images/EchoShell-Icon.png);"></div>
+    <div style="background-image: url(Images/BlazeCanister-Icon.png);"></div>
+    <div style="background-image: url(Images/MetalVessel-Icon.png);"></div>
+    <div style="background-image: url(Images/Chillwater-Icon.png);"></div>
+    <div style="background-image: url(Images/Metalburn-Icon.png);"></div>
+    <div style="background-image: url(Images/Sparkler-Icon.png);"></div>
+    <div style="background-image: url(Images/Wire-Icon.png);"></div>
+    <div style="background-image: url(Images/BonyMeat.png);"></div> -->
 </body>
 </html>
