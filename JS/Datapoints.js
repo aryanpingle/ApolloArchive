@@ -185,7 +185,7 @@ function select_datapoint() {
         return
     }
     if(current_selected) {
-        current_selected.getElementsByTagName("audio")[0].pause()
+        if(current_selected.getAttribute("media-type")) current_selected.getElementsByTagName("audio")[0].pause()
         current_selected.classList.remove("selected")
     }
     print("Selecting focused_datapoint")

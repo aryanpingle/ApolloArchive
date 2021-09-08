@@ -115,6 +115,11 @@ section#datapoint-types {
     .datapoint-choice.datatype-selected {
         color: var(--selection-yellow);
     }
+
+    .datatype-selected > .audio-icon {content: url(../Images/datapoint-icon-audio-yellow.png);}
+    .datatype-selected > .hologram-icon {content: url(../Images/datapoint-icon-hologram-yellow.png);}
+    .datatype-selected > .text-icon {content: url(../Images/datapoint-icon-text-yellow.png);}
+    .datatype-selected > .scanned-glyphs-icon {content: url(../Images/datapoint-icon-scanned-glyphs-yellow.png);}
 }
 
 .datapoint-choice > img {
@@ -485,7 +490,11 @@ section.datatype.shown {
     /* font-weight: 900; */
 }
 
-.datapoint-text :is(p, dl) {
+.datapoint-text code {
+    font-family: 'Inconsolata', monospace;
+}
+
+.datapoint-text :is(p, dl, code) {
     margin: 0;
 }
 
