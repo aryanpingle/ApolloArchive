@@ -20,7 +20,7 @@ stime = time()
 
 def get_html(links):
     contents = []
-    for link in links[:10]:
+    for link in links:
         print(f"Starting {links.index(link)}")
         src = requests.get("https://horizon.fandom.com" + link).text
         # print("GOT SRC")
@@ -29,6 +29,7 @@ def get_html(links):
         content = re.findall(r'Content</span></h2>(.*?)\n*\s*(?=(?:<table class=)|(?:<h2><span class="mw-headline" id="Location">)|(?:<h2><span class="mw-headline" id="Trivia">))', src, flags=re.DOTALL)[0].strip()
         content = re.sub(r'<a.*?>(.*?)</a>', r'\1', content)
         content = re.sub(r'<p>(.*?)</p>', r'\1<br><br>', content, flags=re.DOTALL)
+        content = re.sub(r'<dl>(.*?)</dl>', r'\1<br>', content, flags=re.DOTALL)
         content = re.sub(r"<dd>(.*?)</dd>", r"\1<br>", content, flags=re.DOTALL)
         content = re.sub(r'\\(.)', r'\\\\\1', content)
         # print(content)

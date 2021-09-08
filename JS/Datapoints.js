@@ -88,27 +88,29 @@ function setup_close_buttons() {
 */
 
 function setup_datapoint_numbers() {
-    [...document.querySelectorAll(":is(#Audio, #Hologram) .datapoint-container")].forEach(datapoint_container=>{
+    [...document.getElementsByClassName("datapoint-container")].forEach(datapoint_container=>{
         [...datapoint_container.children].forEach((datapoint, index)=>{
             datapoint.setAttribute("position", index+1)
-
-            // Prep the play-button
-            let datapoint_audio = datapoint.lastElementChild.firstElementChild
-            print(datapoint_audio)
-            let play_button = datapoint_audio.firstElementChild
-            play_button.onclick = event=>{
-                event.stopPropagation()
-                toggle_audio_playback(play_button.previousElementSibling)
-            }
-
-            let audio = document.createElement("AUDIO")
-            datapoint.lastElementChild.firstElementChild.prepend(audio)
-            audio.src = `Datapoints/Audio/HZD A ${index+1}.mp3`
-            audio.addEventListener("timeupdate", function yuh() {
-                update_progress_bar(this)
-            })
-            audio.onended = event=>{
-                audio.parentElement.classList.remove("playing")
+            
+            let media_type = datapoint.getAttribute("media-type")
+            if(media_type) {
+                // Prep the play-button
+                let datapoint_audio = datapoint.lastElementChild.firstElementChild
+                let play_button = datapoint_audio.firstElementChild
+                play_button.onclick = event=>{
+                    event.stopPropagation()
+                    toggle_audio_playback(play_button.previousElementSibling)
+                }
+                // Create the audio element
+                let audio = document.createElement("AUDIO")
+                datapoint.lastElementChild.firstElementChild.prepend(audio)
+                audio.src = `Audio/HZD ${media_type} ${index+1}.mp3`
+                audio.addEventListener("timeupdate", function yuh() {
+                    update_progress_bar(this)
+                })
+                audio.onended = event=>{
+                    audio.parentElement.classList.remove("playing")
+                }
             }
         })
     })
@@ -175,9 +177,11 @@ function select_datapoint() {
     if(current_selected == focused_datapoint) {
         print("Removing selection")
         current_selected.classList.remove("selected")
-        current_selected.getElementsByTagName("audio")[0].pause()
-        current_selected.getElementsByTagName("audio")[0].currentTime = 0
-        current_selected.getElementsByTagName("audio")[0].parentElement.classList.remove("playing")
+        if(current_selected.getAttribute("media-type")) {
+            current_selected.getElementsByTagName("audio")[0].pause()
+            current_selected.getElementsByTagName("audio")[0].currentTime = 0
+            current_selected.getElementsByTagName("audio")[0].parentElement.classList.remove("playing")
+        }
         return
     }
     if(current_selected) {
@@ -274,14 +278,16 @@ function setup_key_presses() {
             let new_element = focused_datapoint.previousElementSibling
             if(new_element) {
                 focus_datapoint(new_element)
-                new_element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+                new_element.parentElement.click()
+                new_element.scrollIntoView({ block: 'center' })
             }
         }
         else if(key == "s" || key == "ArrowDown") {
             let new_element = focused_datapoint.nextElementSibling
             if(new_element) {
                 focus_datapoint(new_element)
-                new_element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+                new_element.parentElement.click()
+                new_element.scrollIntoView({ block: 'center' })
             }
         }
         else {

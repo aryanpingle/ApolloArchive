@@ -3,7 +3,7 @@ import re
 from time import time
 import pyperclip
 
-template = """<div class="datapoint" description="{}">
+template = """<div class="datapoint" description="{}" media-type="{}">
 <div class="datapoint-title">
     <header>{}</header>
 </div>
@@ -22,7 +22,7 @@ template = """<div class="datapoint" description="{}">
 
 stime = time()
 
-def get_html(links):
+def get_html(media_type, links):
     contents = []
     for link in links:
         print(f"Starting {links.index(link)}")
@@ -30,9 +30,10 @@ def get_html(links):
         # print("GOT SRC")
         title = re.search(r'(?<=data-source="title1">).*?(?=</h2>)', src).group()
         # print("GOT TITLE")
-        content = re.findall(r'Content</span></h2>(.*?)\n*\s*(?=<table class=)', src, flags=re.DOTALL)[0].strip()
+        content = re.findall(r'Content</span></h2>(.*?)\n*\s*(?=(?:<table class=)|(?:<h2><span class="mw-headline" id="Location">)|(?:<h2><span class="mw-headline" id="Trivia">))', src, flags=re.DOTALL)[0].strip()
         content = re.sub(r'<a.*?>(.*?)</a>', r'\1', content)
         content = re.sub(r'<p>(.*?)</p>', r'\1<br>', content, flags=re.DOTALL)
+        content = re.sub(r'<dl>(.*?)</dl>', r'\1<br>', content, flags=re.DOTALL)
         content = re.sub(r"<dd>(.*?)</dd>", r"\1<br>", content, flags=re.DOTALL)
 
         # Description
@@ -56,15 +57,15 @@ def get_html(links):
             corruption = "Data Corruption: " + re.findall(r'<div class="pi-data-value pi-font">(.*?)</div>', src[index:], re.DOTALL)[0]
             print(corruption)
             description.append(corruption)
-        contents.append(template.format("<br>".join(description), title, content))
+        contents.append(template.format("<br>".join(description), media_type, title, content))
     return contents
 
 
 links = ['/wiki/Log:_Connor_Chasson_(1)', '/wiki/Log:_Skylar_Rivera', '/wiki/Log:_Ella_Pontes', '/wiki/Log:_Jackson_Frye', '/wiki/Log:_Mia_Sayied', '/wiki/Log:_Connor_Chasson_(2)', '/wiki/Full_Stop', '/wiki/For_Director_Evans', '/wiki/R%26D/Lab_Retooling', '/wiki/Entangled_Waveforms', '/wiki/Regarding_The_Rumors', '/wiki/Comms_Log:_Lt._Murell', '/wiki/Comms_Log:_Sgt._Guliyev', '/wiki/Comms_Log:_Cpl._Mills', '/wiki/Comms_Log:_Sgt._Wandari', '/wiki/Reminder._Again.', '/wiki/Log:_Cpl._Acosta_(A)', '/wiki/Log:_Cpl._Acosta_(B)', '/wiki/Just_a_Little_Longer', '/wiki/So_Sorry!', '/wiki/Edited_And_Approved_1', '/wiki/Edited_And_Approved_2', '/wiki/I_Believe_In_You', '/wiki/Please_Reply!', '/wiki/Unit_Status_Report', '/wiki/Code_Nexus_Reminder', '/wiki/SecureCom_EVZD-XX1X011X', '/wiki/Wife', '/wiki/Meridian%27s_Fall', '/wiki/Prophecy', '/wiki/Itamen_Coddled', '/wiki/Without_Pity', '/wiki/Chosen_of_the_Sun', '/wiki/Interview:_Tom_Paech', '/wiki/Interview:_Travis_Tate', '/wiki/Interview:_Brad_Andac', '/wiki/Interview:_Susanne_Alpert', '/wiki/Interview:_Cpt._Okilo', '/wiki/Interview:_Ron_Felder', '/wiki/Interview:_Dr._Hsu-Vhey', '/wiki/Interview_2:_Brad_Andac', '/wiki/Interview_2:_Susanne_Alpert', '/wiki/Interview_2:_Ron_Felder', '/wiki/Log:_Tom_Paech', '/wiki/Log:_Christina_Hsu-Vhey', '/wiki/Log:_Travis_Tate_(1)', '/wiki/Herres_Testimonial', '/wiki/Code_Nexus_Problems', '/wiki/Lesson_57-6-A', '/wiki/GAIA_Prime_Arrival_Log', '/wiki/Log:_Charles_Ronson_(1)', '/wiki/Log:_Charles_Ronson_(2)', '/wiki/Log:_Margo_Sh%C4%95n', '/wiki/Rest_In_Peace', '/wiki/The_Future', '/wiki/The_Solution', '/wiki/Log:_Travis_Tate_(2)', '/wiki/Core_Control_Log', '/wiki/ELEUTHIA_Runtime_Check', '/wiki/First_Meeting', '/wiki/Buried_Shadow_(Datapoint)', '/wiki/Intercepted_Transmission', '/wiki/Recording_Device']
 
-with open('Datapoints.html') as f:
+with open('Datapoints.html', encoding="utf-8") as f:
     html = f.read()
-html = re.sub(r"(?<=<!-- AUDIO DATAPOINTS -->).*?(?=<!-- END AUDIO DATAPOINTS -->)", "".join(get_html(links)), html, flags=re.DOTALL)
+html = re.sub(r"(?<=<!-- AUDIO DATAPOINTS -->).*?(?=<!-- END AUDIO DATAPOINTS -->)", "".join(get_html("A", links)), html, flags=re.DOTALL)
 with open("Datapoints.html", 'w', encoding="utf-8") as f:
     f.write(html)
 
@@ -93,9 +94,9 @@ links = re.findall(r'<a href="(.*?)"', """<ol><li><a href="/wiki/Happy_Birthday_
 <li><a href="/wiki/Elisabet_Sobeck_Memorial" title="Elisabet Sobeck Memorial">Elisabet Sobeck Memorial</a></li>
 <li><a href="/wiki/Emergency_Recording" title="Emergency Recording">Emergency Recording</a></li></ol>""", re.DOTALL)
 
-with open('Datapoints.html') as f:
+with open('Datapoints.html', encoding="utf-8") as f:
     html = f.read()
-html = re.sub(r"(?<=<!-- HOLOGRAM DATAPOINTS -->).*?(?=<!-- END HOLOGRAM DATAPOINTS -->)", "".join(get_html(links)), html, flags=re.DOTALL)
+html = re.sub(r"(?<=<!-- HOLOGRAM DATAPOINTS -->).*?(?=<!-- END HOLOGRAM DATAPOINTS -->)", "".join(get_html("H", links)), html, flags=re.DOTALL)
 with open("Datapoints.html", 'w', encoding="utf-8") as f:
     f.write(html)
 

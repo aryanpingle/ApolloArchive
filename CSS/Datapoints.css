@@ -306,6 +306,7 @@ section.datatype.shown {
 /* Finally, datapoints themselves */
 
 .datapoint {
+    width: calc(100% - 20px);
     user-select: none;
     counter-increment: datapoint-number;
     --datapoint-audio-height: 0em;
@@ -484,7 +485,7 @@ section.datatype.shown {
     /* font-weight: 900; */
 }
 
-.datapoint-text p {
+.datapoint-text :is(p, dl) {
     margin: 0;
 }
 
@@ -542,6 +543,8 @@ section#desktop-sidebar {
     }
     
     .classic-layout .datapoint {
+        width: 100%;
+
         position: relative;
         aspect-ratio: 1 / 1;
         
