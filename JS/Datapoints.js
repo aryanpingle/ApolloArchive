@@ -84,14 +84,33 @@ function setup_close_buttons() {
 }
 
 /**
- * Assigns a position attribute to every datapoint under every datapoint-container, starting from 1
- */
+* Assigns a position attribute to every datapoint under every datapoint-container, starting from 1
+*/
 
 function setup_datapoint_numbers() {
-    [...document.getElementsByClassName("datapoint-container")].forEach(datapoint_container=>{
-        [...datapoint_container.children].forEach((datapoint, index)=>[
+    [...document.querySelectorAll(":is(#Audio, #Hologram) .datapoint-container")].forEach(datapoint_container=>{
+        [...datapoint_container.children].forEach((datapoint, index)=>{
             datapoint.setAttribute("position", index+1)
-        ])
+
+            // Prep the play-button
+            let datapoint_audio = datapoint.lastElementChild.firstElementChild
+            print(datapoint_audio)
+            let play_button = datapoint_audio.firstElementChild
+            play_button.onclick = event=>{
+                event.stopPropagation()
+                toggle_audio_playback(play_button.previousElementSibling)
+            }
+
+            let audio = document.createElement("AUDIO")
+            datapoint.lastElementChild.firstElementChild.prepend(audio)
+            audio.src = `Datapoints/Audio/HZD A ${index+1}.mp3`
+            audio.addEventListener("timeupdate", function yuh() {
+                update_progress_bar(this)
+            })
+            audio.onended = event=>{
+                audio.parentElement.classList.remove("playing")
+            }
+        })
     })
 }
 
@@ -151,19 +170,18 @@ function focus_datapoint(datapoint) {
     SIDEBAR.description.innerHTML = datapoint.getAttribute("description")
 }
 
-function deselect_datapoint() {
-    print("Deselecting focused_datapoint")
-    focused_datapoint.classList.remove("selected")
-}
-
 function select_datapoint() {
     let current_selected = document.querySelector(".datapoint.selected")
     if(current_selected == focused_datapoint) {
         print("Removing selection")
         current_selected.classList.remove("selected")
+        current_selected.getElementsByTagName("audio")[0].pause()
+        current_selected.getElementsByTagName("audio")[0].currentTime = 0
+        current_selected.getElementsByTagName("audio")[0].parentElement.classList.remove("playing")
         return
     }
     if(current_selected) {
+        current_selected.getElementsByTagName("audio")[0].pause()
         current_selected.classList.remove("selected")
     }
     print("Selecting focused_datapoint")
@@ -288,6 +306,16 @@ function toggle_layout() {
 }
 
 function toggle_audio_playback(audio_element) {
-    print(audio_element)
-    audio_element.play()
+    if(audio_element.paused) {
+        audio_element.play()
+        audio_element.parentElement.classList.add("playing")
+    }
+    else {
+        audio_element.pause()
+        audio_element.parentElement.classList.remove("playing")
+    }
+}
+
+function update_progress_bar(audio_element) {
+    audio_element.parentElement.style = `--perc: ${100 * audio_element.currentTime / audio_element.duration}%`
 }

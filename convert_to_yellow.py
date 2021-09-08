@@ -1,7 +1,7 @@
 from time import time
 from PIL import Image
 
-for name in ["audio"]:
+for name in ["audio", "hologram", "text", "scanned-glyphs"]:
     img = Image.open(f"Images/datapoint-icon-{name}.png").convert("RGBA")
     data = img.getdata()
 
