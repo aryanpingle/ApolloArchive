@@ -255,7 +255,10 @@ section.datatype.shown {
 .datatype-title > header {
     color: var(--steel-blue);
     text-align: center;
-    width: 100%;
+    width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     font-size: 1.5em;
 }
 
@@ -276,7 +279,10 @@ section.datatype.shown {
     height: 100%;
     width: 100%;
     
-    padding: 0 10px;
+    /* padding: 0 10px; */
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
     
     overflow: auto;
     /* background-color: blue; */
@@ -302,16 +308,16 @@ section.datatype.shown {
 .datapoint-container {
     --columns: 1;
     height: fit-content;
-    width: 100%;
+    width: calc(100% - 20px);
     
     display: grid;
-    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-template-columns: repeat(1, 100%);
 }
 
 /* Finally, datapoints themselves */
 
 .datapoint {
-    width: calc(100% - 20px);
+    width: 100%;
     user-select: none;
     counter-increment: datapoint-number;
     --datapoint-audio-height: 0em;
@@ -474,6 +480,7 @@ section.datatype.shown {
     content: '';
     position: absolute;
     width: var(--perc);
+    transition: width 200ms linear;
     height: 100%;
     background-color: white;
 }
@@ -498,6 +505,12 @@ section.datatype.shown {
     margin: 0;
 }
 
+/* Datapoint Popup */
+
+#datapoint-popup {
+    display: none;
+}
+
 /* Hide the desktop rightmost sidebar */
 
 section#desktop-sidebar {
@@ -511,6 +524,12 @@ section#desktop-sidebar {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        opacity: 1;
+        transition: opacity 250ms ease;
+    }
+
+    section#datatype-container:not(.shown) ~ section#desktop-sidebar {
+        opacity: 0;
     }
     
     #desktop-sidebar > header {
@@ -536,7 +555,7 @@ section#desktop-sidebar {
         color:rgba(255, 255, 255, 0.85);
     }
     
-    #desktop-sidebar > img {
+    #desktop-sidebar > img.datatype-poster {
         margin-top: auto;
         width: 100%;
     }
@@ -548,6 +567,7 @@ section#desktop-sidebar {
     /* Classic Layout for desktop */
     .classic-layout .datapoint-container {
         --columns: 12;
+        grid-template-columns: repeat(var(--columns), 1fr);
         gap: 0.1vw;
     }
     

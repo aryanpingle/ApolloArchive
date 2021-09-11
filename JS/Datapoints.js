@@ -20,9 +20,10 @@ async function setup_local() {
     SIDEBAR.image = IMAGE
     setup_datatype_links() // Verified
     setup_close_buttons() // Verified
-    setup_datapoint_numbers()
+    setup_datapoint_numbers() // Verified
     set_datapoint_events() // Verified
     set_datapoint_expansion_sizes() // Verified
+    document.body.classList.add("classic-layout")
 }
 
 function resize_handler_local() {
@@ -48,9 +49,11 @@ function setup_datatype_links() {
             document.getElementsByClassName("datatype-selected")[0]?.classList.remove("datatype-selected")
             datatype_choice.classList.add("datatype-selected")
             if(current_datatype) gid(current_datatype).classList.remove("shown")
-            current_datatype = datatype_choice.getAttribute("target")
+            current_datatype = datatype_choice.getAttribute("target");
             // Update the poster
-            gid("desktop-sidebar").lastElementChild.src = `Images/${current_datatype.startsWith("Text")?"text":current_datatype.toLowerCase()}-poster.png`
+            [...document.getElementsByClassName("datatype-poster")].forEach(ele=>{
+                ele.src = `Images/${current_datatype.startsWith("Text")?"text":current_datatype.toLowerCase()}-poster.png`
+            })
             // Show the container for the datatype
             gid("datatype-container").classList.add("shown")
             // Show the section with all the datapoints
@@ -308,7 +311,7 @@ function toggle_layout() {
     }
     
     // Neccessary because display: none causes the first time to not work
-    set_datapoint_expansion_sizes()
+    // set_datapoint_expansion_sizes()
 }
 
 function toggle_audio_playback(audio_element) {
