@@ -5,6 +5,7 @@ const get_params = ()=>{
 }
 const gid = id_name=>document.getElementById(id_name)
 const sum = (list, lambda=e=>e)=>list.reduce((acc,val)=>acc+lambda(val), 0)
+const logtime = (stime, process)=>print(`${process} completed in ${new Date()-stime}ms`)
 
 var mobile_mode = true;
 

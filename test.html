@@ -12,36 +12,29 @@
         }
 
         body {
+            color: white;
             margin: 0;
             padding: 0;
             background-color: black;
             position: relative;
         }
-
-        div {
-            position: absolute;
-            inset: 0;
-            width: 400px;
-            height: 380px;
-
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            mix-blend-mode: darken;
-        }
     </style>
 </head>
 <body>
-    <img src="Images/DatapointBackground-Transparent.png" alt="">
-    <!-- <div style="background-image: url(Images/Ridgewood-Icon.png);"></div>
-    <div style="background-image: url(Images/Fast_Travel_Pack_Icon.png);"></div>
-    <div style="background-image: url(Images/EchoShell-Icon.png);"></div>
-    <div style="background-image: url(Images/BlazeCanister-Icon.png);"></div>
-    <div style="background-image: url(Images/MetalVessel-Icon.png);"></div>
-    <div style="background-image: url(Images/Chillwater-Icon.png);"></div>
-    <div style="background-image: url(Images/Metalburn-Icon.png);"></div>
-    <div style="background-image: url(Images/Sparkler-Icon.png);"></div>
-    <div style="background-image: url(Images/Wire-Icon.png);"></div>
-    <div style="background-image: url(Images/BonyMeat.png);"></div> -->
+    <div id="parent">
+        <div>
+            <h2>
+                Text here
+            </h2>
+        </div>
+    </div>
+
+    <script>
+        window.onload = ()=>{
+            document.getElementById("parent").onclick = event=>{
+                console.log(event.target)
+            }
+        }
+    </script>
 </body>
 </html>

@@ -122,8 +122,9 @@ function setup_close_buttons() {
 */
 
 function setup_datapoint_numbers() {
+    let stime = new Date();
     // All the datapoints
-    [...document.getElementsByClassName("datapoint-container")].forEach(datapoint_container=>{
+    for(const datapoint_container of document.getElementsByClassName("datapoint-container")) {
         [...datapoint_container.children].forEach((datapoint, index)=>{
             datapoint.setAttribute("position", index+1)
             
@@ -150,7 +151,8 @@ function setup_datapoint_numbers() {
                 }
             }
         })
-    })
+    }
+    logtime(stime, "setup_datapoint_numbers (I)")
     // Just the popup element
     let datapoint = gid("popup-content")
     let datapoint_audio = datapoint.querySelector(".datapoint-audio")
@@ -186,11 +188,16 @@ function close_popup() {
 */
 
 function set_datapoint_expansion_sizes() {
-    for(const ele of document.getElementsByClassName("datapoint")) {
-        // Set the expansion height based on the content size
-        let height = ele.querySelector("text").offsetHeight
-        ele.style = `--datapoint-text-size: ${height}px`
-    }
+    // IM A FUCKING GOD
+    // Reading the height of an element causes a reflow to happen so that the layout isn't 'stale'. But the next read won't cause a reflow because the layout isn't stale anymore.
+    // Previous code: (read then write) repeat = N read reflows + N style set reflows
+    // Current code: read all then write all = 1 read reflow + N style set reflows
+
+    // let stime = new Date()
+    let arr = Array.from(document.getElementsByClassName("datapoint"))
+    let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
+    arr.forEach((ele, index)=>ele.style.setProperty('--datapoint-text-size', heights[index]))
+    // logtime(stime, "expansion_sizes");
 }
 
 /**
@@ -258,7 +265,7 @@ function focus_datapoint(datapoint) {
 }
 
 function select_datapoint() {
-    let current_selected = document.querySelector(".datapoint.selected")
+    let current_selected = document.querySelector(".selected")
     if(current_selected == focused_datapoint) {
         // print("Removing selection")
         current_selected.classList.remove("selected")
@@ -296,7 +303,7 @@ function prepare_datapoint_expansions() {
                 parent.classList.remove("selected")
                 return
             }
-            document.querySelector(".datapoint.selected")?.classList.remove("selected")
+            document.querySelector(".selected")?.classList.remove("selected")
             parent.classList.add("selected");
         }
     }
@@ -305,7 +312,7 @@ function prepare_datapoint_expansions() {
         ele.onmouseover = event=>{
             if(!is_classic_layout() || ele.classList.contains("selected")) return;
             // print("MOUSEOVERED")
-            document.querySelector(".datapoint.selected").classList.remove("selected")
+            document.querySelector(".selected").classList.remove("selected")
             ele.classList.add("selected");
             new Audio("click2.mp3").play()
         }

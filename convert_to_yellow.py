@@ -20,5 +20,5 @@ from PIL import Image
 
 img = Image.open("Images/Background - Centered.png").convert("RGBA")
 w,h = img.width,img.height
-img = img.resize((w//3, h//3))
+img = img.resize((w//2, h//2))
 img.save("Images/Background-min.png", "PNG")

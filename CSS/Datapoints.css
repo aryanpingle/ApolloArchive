@@ -378,7 +378,7 @@ section.datatype.shown {
 }
 
 .datapoint.selected > .datapoint-content {
-    height: calc(var(--datapoint-audio-height) + var(--datapoint-text-size) + 10px);
+    height: calc(var(--datapoint-audio-height) + var(--datapoint-text-size) * 1px + 10px);
 }
 
 .datapoint-audio {
@@ -455,7 +455,6 @@ section.datatype.shown {
 
 .datapoint-text {
     color:rgba(255, 255, 255, 0.85);
-    height: var(--datapoint-text-size);
     overflow: auto;
 }
 
