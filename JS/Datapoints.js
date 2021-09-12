@@ -1,3 +1,6 @@
+// BIG BIG BIG OPTIMIZATION TIME
+// Make an empty array for each datatype. These store the datapoints. Instead of an event listener for the datapoint as well as the play button as well as the title, set an eventlistener on the entire datapoint, and identify what was clicked through `event.target`. Play the datapoint audio from the earlier array if present, otherwise set the src to the corresponding url, and play it. Lot of refactoring required for this, but it's prolly essential for quick loading.
+
 var bruh = new Audio("click.mp3")
 
 var focused_datapoint = null
