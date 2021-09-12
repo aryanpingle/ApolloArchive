@@ -494,7 +494,7 @@ section#desktop-sidebar {
         transition: opacity 250ms ease;
     }
 
-    section#datatype-container:not(.shown) ~ section#desktop-sidebar {
+    section#datatype-container:not(.shown) + section#desktop-sidebar {
         opacity: 0;
     }
     
@@ -578,9 +578,14 @@ section#desktop-sidebar {
         left: 0;
         height: 100%;
         width: 100%;
-        background: url(../Images/Background\ -\ Centered.png) center/cover no-repeat;
-        z-index: 999;
+        /* z-index: 999; */
         display: block;
+    }
+
+    #datapoint-popup.shown + #page {
+        opacity: 0 !important;
+        user-select: none !important;
+        pointer-events: none !important;
     }
 
     #popup-main {
@@ -588,7 +593,6 @@ section#desktop-sidebar {
         justify-content: center;
         align-items: stretch;
         height: 90vh;
-        /* background-color: aquamarine; */
     }
 
     #popup-main > #popup-content {
@@ -597,8 +601,6 @@ section#desktop-sidebar {
         display: flex;
         justify-content: center;
         align-items: center;
-
-        /* background-color: greenyellow; */
     }
 
     #popup-info {

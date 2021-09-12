@@ -50,7 +50,6 @@ body {
 }
 
 nav#mobile-nav {
-    /* background-color: aquamarine; */
     height: 100%;
     width: 100%;
     display: flex;
@@ -59,7 +58,7 @@ nav#mobile-nav {
     overflow: hidden;
 }
 
-/* Mobile Nav Header - Logo and + */
+/* Mobile Nav Header - Logo and + symbol */
 
 nav#mobile-nav > #nav-header {
     position: relative;
@@ -215,6 +214,7 @@ nav#desktop-nav {
         height: 100vh;
         padding: 0;
         opacity: 1 !important;
+        transition: none;
         user-select: auto !important;
         pointer-events: auto !important;
     }

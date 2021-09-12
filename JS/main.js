@@ -50,7 +50,7 @@ function set_mobile_nav_delays() {
 
 function set_mobile_links() {
     for(const ele of document.querySelectorAll(".nav-body > *")) {
-        if(ele.innerHTML == window.location.href.replace(".html", "").split(/[\W\.]/).pop()) {
+        if(ele.innerHTML.toLowerCase() == window.location.href.replace(".html", "").split(/[\W\.]/).pop().toLowerCase()) {
             ele.classList.add("current")
         }
         print()

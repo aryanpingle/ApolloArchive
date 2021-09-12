@@ -350,7 +350,7 @@ function setup_key_presses() {
         }
         else if(is_classic_layout()) {
             // Since this is a classic layout, we need to traverse the grid
-            let columns = parseInt(getComputedStyle(gid(current_datatype).getElementsByClassName("datapoint-container")[0]).getPropertyValue("--columns"))
+            let columns = parseInt(getComputedStyle(gid(current_datatype).querySelector(".datapoint-container")).getPropertyValue("--columns"))
             let new_index = 0;
             let position = parseInt(focused_datapoint.getAttribute("position"))
             if(key == "w" || key == "ArrowUp") {
