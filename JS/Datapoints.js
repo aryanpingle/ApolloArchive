@@ -70,7 +70,7 @@ function is_classic_layout() {
 function setup_datatype_links() {
     for(const datatype_choice of gid("datapoint-types-inner").children) {
         datatype_choice.onclick = event=>{
-            document.getElementsByClassName("datatype-selected")[0]?.classList.remove("datatype-selected")
+            document.querySelector(".datatype-selected")?.classList.remove("datatype-selected")
             datatype_choice.classList.add("datatype-selected")
             if(current_datatype) gid(current_datatype).classList.remove("shown")
             current_datatype = datatype_choice.getAttribute("target");
@@ -138,6 +138,7 @@ function setup_datapoint_numbers() {
                 }
                 // Create the audio element
                 let audio = document.createElement("AUDIO")
+                audio.preload = "metadata"
                 datapoint.lastElementChild.firstElementChild.prepend(audio)
                 audio.src = `Audio/HZD ${media_type} ${index+1}.mp3`
                 audio.addEventListener("timeupdate", function yuh() {
@@ -186,7 +187,7 @@ function close_popup() {
 function set_datapoint_expansion_sizes() {
     for(const ele of document.getElementsByClassName("datapoint")) {
         // Set the expansion height based on the content size
-        let height = ele.getElementsByTagName("text")[0].offsetHeight
+        let height = ele.querySelector("text").offsetHeight
         ele.style = `--datapoint-text-size: ${height}px`
     }
 }

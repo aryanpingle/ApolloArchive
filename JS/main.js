@@ -14,7 +14,6 @@ function setup_main() {
     }
     set_mobile_nav_delays()
     set_mobile_links()
-    setup_key_presses()
     setup_navigation_buttons()
 }
 
@@ -49,10 +48,8 @@ function set_mobile_nav_delays() {
     })
 }
 
-const $ = query=>document.querySelectorAll(query)
-
 function set_mobile_links() {
-    for(const ele of $(".nav-body > *")) {
+    for(const ele of document.querySelectorAll(".nav-body > *")) {
         if(ele.innerHTML == window.location.href.replace(".html", "").split(/[\W\.]/).pop()) {
             ele.classList.add("current")
         }
@@ -61,9 +58,9 @@ function set_mobile_links() {
 }
 
 function go_to_previous_page() {
-    let sib = $("#desktop-nav .current")[0].previousElementSibling
+    let sib = document.querySelector("#desktop-nav .current").previousElementSibling
     if (sib==null) {
-        $("#desktop-nav .nav-body")[0].lastElementChild.click()
+        document.querySelector("#desktop-nav .nav-body").lastElementChild.click()
     }
     else {
         sib.click()
@@ -71,24 +68,12 @@ function go_to_previous_page() {
 }
 
 function go_to_next_page() {
-    let sib = $("#desktop-nav .current")[0].nextElementSibling
+    let sib = document.querySelector("#desktop-nav .current").nextElementSibling
     if (sib==null) {
-        $("#desktop-nav .nav-body")[0].firstElementChild.click()
+        document.querySelector("#desktop-nav .nav-body").firstElementChild.click()
     }
     else {
         sib.click()
-    }
-}
-
-function setup_key_presses() {
-    document.body.onkeydown = event=>{
-        let key = event.key
-        if (key == "q") {
-            go_to_previous_page()
-        }
-        else if (key=="e") {
-            go_to_next_page()
-        }
     }
 }
 
