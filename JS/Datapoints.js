@@ -21,7 +21,7 @@ var POPUP = {
     text: null
 }
 
-async function setup_local() {
+function setup_local() {
     print("Starting local setup")
     
     // Set up the SIDEBAR constant
@@ -47,6 +47,7 @@ async function setup_local() {
     setup_datapoint_numbers() // Verified
     set_datapoint_events() // Verified
     set_datapoint_expansion_sizes() // Verified
+    setup_key_presses()
     document.body.classList.add("classic-layout")
 }
 
@@ -230,6 +231,7 @@ function init_popup(datapoint) {
     // Due to the layout of datapoints and my shit naming system, #popup-content acts like the datapoint div, so add the media-type to it
     let mt = datapoint.getAttribute("media-type")
     if(mt) gid("popup-content").setAttribute("media-type", mt)
+    else gid("popup-content").removeAttribute("media-type")
     // Set the header
     POPUP.header.innerHTML = datapoint.firstElementChild.firstElementChild.innerHTML
     // Set the datatype

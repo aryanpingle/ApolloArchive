@@ -231,7 +231,6 @@ section.datatype.shown {
         background-position: 0 center;
         background-size: 100% cover;
         background-repeat: no-repeat;
-        filter: saturate(3);
     }   
 }
 

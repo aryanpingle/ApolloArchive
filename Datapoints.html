@@ -7876,16 +7876,17 @@
 
     <!-- Scripts -->
     <script src="JS/main.js"></script>
-    <!-- <script src="JS/Datapoints-min.js"></script> -->
+    <script src="JS/Datapoints.js"></script>
     <script>
         window.onload = () => {
             setup_main()
-            // setup_local()
+            setup_local()
+            print("FINISHED SETUP")
         }
 
         window.onresize = () => {
             resize_handler_main()
-            // resize_handler_local()
+            resize_handler_local()
         }
     </script>
 </body>

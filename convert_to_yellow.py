@@ -18,7 +18,7 @@ from PIL import Image
 #     img.putdata(newdata)
 #     img.save(f"Images/datapoint-icon-{name}-yellow.png", "PNG")
 
-for name in ["audio", "hologram", "text", "scanned-glyphs"]:
-    img = Image.open(f"Images/datapoint-icon-{name}.png").convert("RGBA")
-    img = img.resize((128, 128))
-    img.save(f"Images/datapoint-icon-{name}.png", "PNG")
+img = Image.open("Images/Logo-White.png").convert("RGBA")
+w,h = img.width,img.height
+img = img.resize((w//3, h//3))
+img.save("Images/Logo-White.png", "PNG")
