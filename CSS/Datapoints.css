@@ -128,7 +128,6 @@ section#datapoint-types {
 }
 
 .datapoint-choice > header {
-    /* position: relative; */
     width: 100%;
 }
 
@@ -142,10 +141,7 @@ section#datapoint-types {
     height: 100%;
     opacity: 0.25;
     filter: invert(0.8);
-    background-image: url(../Images/IDK2.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+    background: url(../Images/IDK2.png) center/contain no-repeat;
 }
 
 @media (min-width: 1024px) {
@@ -211,7 +207,6 @@ section.datatype.shown {
 
 .datatype > .datatype-title {
     position: relative;
-    /* background-color: antiquewhite; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -224,6 +219,7 @@ section.datatype.shown {
 @media (min-width: 1024px) {
     .datatype > .datatype-title {
         overflow: visible;
+        justify-content: flex-start;
     }
     
     .datatype-title::after {
@@ -233,7 +229,6 @@ section.datatype.shown {
         left: 0;
         width: 100%;
         height: 15px;
-        /* background-color: red; */
         background-image: url(../Images/scrollbar-horizontal.png);
         background-position: 0 center;
         background-size: 100% cover;
@@ -275,33 +270,24 @@ section.datatype.shown {
 /* The grid of datapoints */
 
 .datapoint-container-outer {
-    /* background-color: blueviolet; */
     height: 100%;
     width: 100%;
     
-    /* padding: 0 10px; */
     display: flex;
     justify-content: center;
     /* align-items: center; */
     
     overflow: auto;
-    /* background-color: blue; */
 }
 
 @media (min-width: 1024px) {
     .datapoint-container-outer::-webkit-scrollbar {
         width: 8px;
-        background-image: url(../Images/scrollbar-veretical.png);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
+        background: url(../Images/scrollbar-veretical.png) center/cover no-repeat;
     }
     
     .datapoint-container-outer::-webkit-scrollbar-thumb {
-        background-image: url(../Images/scrollbar-thumb-vertical.png);
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
+        background: url(../Images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
     }
 }
 
@@ -324,7 +310,7 @@ section.datatype.shown {
     --datapoint-text-max-height: 8em;
 }
 
-:is(#Audio, #Hologram) .datapoint {
+.datapoint[media-type] {
     --datapoint-audio-height: 5em;
 }
 
@@ -333,7 +319,7 @@ section.datatype.shown {
     align-items: center;
 }
 
-/* This is the icon associated with each data type, placed at the start of each datapoint's title */
+/* This is the number associated with each datapoint, placed at the start of the datapoint title */
 
 .datapoint-title::before {
     content: counter(datapoint-number);
@@ -341,21 +327,12 @@ section.datatype.shown {
     display: flex;
     justify-content: center;
     align-items: center;
-    left: 0;
     color: var(--steel-blue);
-    /* opacity: 0.5; */
     height: 1em;
     aspect-ratio: 1 / 1;
-    /* background-image: url(../Images/datapoint-icon-audio.png); */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background: none;
     font-size: 0.5em;
     margin-right: 5px;
 }
-
-#Audio .datapoint-title::before {background-image: url(../Images/datapoint-icon-audio.png);}
 
 .datapoint-title > header {
     position: relative;
@@ -365,10 +342,9 @@ section.datatype.shown {
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 1.1em;
-    transition: 250ms ease;
-    transition-property: color;
+    transition: color 250ms ease;
     /* color: var(--steel-blue); */
-    color: rgba(255, 255, 255, 0.85)
+    color: rgba(255, 255, 255, 0.85);
 }
 
 @media (min-width: 1024px) {
@@ -408,7 +384,7 @@ section.datatype.shown {
     height: calc(var(--datapoint-audio-height) + var(--datapoint-text-size) + 10px);
 }
 
-.datapoint-content > .datapoint-audio {
+.datapoint-audio {
     --perc: 0%;
     position: relative;
     height: var(--datapoint-audio-height);
@@ -418,7 +394,6 @@ section.datatype.shown {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* flex-direction: column; */
     gap: 10px;
 }
 
@@ -452,10 +427,6 @@ section.datatype.shown {
 }
 
 .datapoint-audio > .play-button {
-    justify-self: flex-start;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 2em;
     aspect-ratio: 1 / 1;
     
@@ -486,22 +457,20 @@ section.datatype.shown {
 }
 
 .datapoint-text {
-    /* color: var(--steel-blue); */
     color:rgba(255, 255, 255, 0.85);
     height: var(--datapoint-text-size);
     overflow: auto;
 }
 
-.datapoint-text b {
+text b {
     color: rgba(255, 255, 255, 0.85);
-    /* font-weight: 900; */
 }
 
-.datapoint-text code {
+text code {
     font-family: 'Inconsolata', monospace;
 }
 
-.datapoint-text :is(p, dl, code) {
+text :is(p, dl, code) {
     margin: 0;
 }
 
@@ -602,6 +571,116 @@ section#desktop-sidebar {
     
     .classic-layout .datapoint > * {
         display: none;
+    }
+
+    /* The desktop popup */
+
+    #datapoint-popup.shown {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: url(../Images/Background\ -\ Centered.png) center/cover no-repeat;
+        z-index: 999;
+        display: block;
+    }
+
+    #popup-main {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        height: 90vh;
+        /* background-color: aquamarine; */
+    }
+
+    #popup-main > #popup-content {
+        flex: 6 0 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        /* background-color: greenyellow; */
+    }
+
+    #popup-info {
+        /* background-color: burlywood; */
+        width: 75%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #popup-info > header {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 3em;
+        aspect-ratio: 528 / 94;
+        color: white;
+        background: url(../Images/cum2.png) 0/contain no-repeat;
+        text-align: center;
+        padding: 0;
+    }
+
+    #popup-info > span {
+        font-size: 2em;
+        color: var(--steel-blue);
+    }
+
+    #popup-info > .datapoint-audio {
+        height: 6em;
+        margin: 10px 0;
+        width: 50%;
+    }
+
+    #popup-content:not([media-type]) .datapoint-audio {
+        display: none;
+    } 
+
+    #popup-info > #popup-text {
+        padding-right: 10px;
+        font-family: 'Inconsolata', monospace;
+        font-size: 21px;
+        width: 75%;
+        height: 50%;
+        color:rgba(255, 255, 255, 0.85);
+        overflow: auto;
+    }
+
+    #popup-text::-webkit-scrollbar {
+        width: 8px;
+        background: url(../Images/scrollbar-veretical.png) center/cover no-repeat;
+    }
+    
+    #popup-text::-webkit-scrollbar-thumb {
+        background: url(../Images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
+    }
+
+    #popup-main > #poster-img {
+        flex: 4 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    #poster-img > img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    #datapoint-popup > .controls-container {
+        padding: 0 10%;
+        height: 10vh;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 

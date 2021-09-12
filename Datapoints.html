@@ -2489,7 +2489,7 @@
                                     </div>
                                 </div>
                                 <div class="datapoint"
-                                    description="Holo<br>Entry B1-A-HX-001285891<br>Data Corruption: Partial"
+                                    description="Holo<br>Entry: B1-A-HX-001285891<br>Data Corruption: Partial"
                                     media-type="H">
                                     <div class="datapoint-title">
                                         <header>E9B1 Incident Log A</header>
@@ -7845,23 +7845,28 @@
         <div id="datapoint-popup">
             <div id="popup-main">
                 <div id="popup-content">
-                    <header></header>
-                    <span></span>
-                    <div class="datapoint-audio">
-                        <audio></audio>
-                        <div class="play-button"></div>
-                        <div class="progress-bar"></div>
+                    <div id="popup-info">
+                        <header>Datapoint Title</header>
+                        <span>Audio Datapoint</span> <!--Span is for the datatype-->
+                        <div class="datapoint-audio">
+                            <audio></audio>
+                            <div class="play-button"></div>
+                            <div class="progress-bar"></div>
+                        </div>
+                        <div id="popup-text">
+                        </div>
                     </div>
-                    
                 </div>
-                <img class="datatype-poster" alt="">
+                <div id="poster-img">
+                    <img class="datatype-poster" alt="">
+                </div>
             </div>
             <div class="controls-container">
-                <div id="switch-layout" onclick="toggle_layout()">
+                <div id="switch-layout" onclick="close_popup()">
                     <div class="control-key">ESC</div>
                     Back
                 </div>
-                <div id="select-button" onclick="select_datapoint()">
+                <div id="select-button" onclick="toggle_audio_playback(POPUP.audio.firstElementChild)">
                     <div class="control-key">F</div>
                     Play / Pause
                 </div>
