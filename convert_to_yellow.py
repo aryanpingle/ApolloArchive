@@ -18,7 +18,7 @@ from PIL import Image
 #     img.putdata(newdata)
 #     img.save(f"Images/datapoint-icon-{name}-yellow.png", "PNG")
 
-img = Image.open("Images/Logo-White.png").convert("RGBA")
+img = Image.open("Images/Background - Centered.png").convert("RGBA")
 w,h = img.width,img.height
 img = img.resize((w//3, h//3))
-img.save("Images/Logo-White.png", "PNG")
+img.save("Images/Background-min.png", "PNG")

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap');
 
 @font-face {
@@ -44,7 +43,7 @@ body {
     position: relative;
     background-color: black;
 
-    background-image: url(../Images/Background\ -\ Centered.png);
+    background-image: url(../Images/Background-min.png);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -58,7 +57,6 @@ nav#mobile-nav {
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    /* transition: height 250ms ease; */
 }
 
 /* Mobile Nav Header - Logo and + */
