@@ -11,7 +11,6 @@
     <!-- CSS -->
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/Datapoints.css">
-    <script>var STIME = new Date();</script>
 </head>
 
 <body>
@@ -7881,12 +7880,9 @@
     <script src="JS/Datapoints.js"></script>
     <script>
         window.onload = () => {
-            logtime(STIME, "HTML PARSING")
-            let stime = new Date()
             setup_main()
             setup_local()
             print("FINISHED SETUP")
-            logtime(stime, "setup")
         }
 
         window.onresize = () => {

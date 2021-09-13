@@ -1,9 +1,11 @@
-// BIG BIG BIG OPTIMIZATION TIME
-// Make an empty array for each datatype. These store the datapoints. Instead of an event listener for the datapoint as well as the play button as well as the title, set an eventlistener on the entire datapoint, and identify what was clicked through `event.target`. Play the datapoint audio from the earlier array if present, otherwise set the src to the corresponding url, and play it. Lot of refactoring required for this, but it's prolly essential for quick loading.
-
-var bruh = new Audio("click.mp3")
+const all_audios = {
+    "A": new Array(63),
+    "H": new Array(22)
+}
+var current_audio = null
 
 var focused_datapoint = null
+var selected_datapoint = null
 var datapoints = []
 
 var current_datatype = ""
@@ -11,9 +13,9 @@ var current_datatype = ""
 var POPUP_MODE = false
 
 var SIDEBAR = {
-    title: 0,
-    description: 0,
-    image: 0
+    title: null,
+    description: null,
+    image: null
 }
 
 var POPUP = {
@@ -47,7 +49,6 @@ function setup_local() {
     
     setup_datatype_links() // Verified
     setup_close_buttons() // Verified
-    setup_datapoint_numbers() // Verified
     set_datapoint_events() // Verified
     set_datapoint_expansion_sizes() // Verified
     setup_key_presses()
@@ -72,11 +73,24 @@ function is_classic_layout() {
 */
 
 function setup_datatype_links() {
+    let stime = new Date()
     for(const datatype_choice of gid("datapoint-types-inner").children) {
         datatype_choice.onclick = event=>{
-            document.querySelector(".datatype-selected")?.classList.remove("datatype-selected")
+            // If you clicked on the currently selected datatype choice, then ignore
+            let current_datatype_choice = document.getElementsByClassName("datatype-selected")[0]
+            if(current_datatype_choice == datatype_choice) return
+            // If it is another choice, de-select it and hide its corresponding section
+            if(current_datatype_choice) {
+                current_datatype_choice.classList.remove("datatype-selected")
+                gid(current_datatype).classList.remove("shown")
+                // EXTRA: Stop the currently playing audio and de-select the selected datapoint
+                stop_audio()
+                if(selected_datapoint) {
+                    selected_datapoint.classList.remove("selected")
+                    selected_datapoint = null
+                }
+            }
             datatype_choice.classList.add("datatype-selected")
-            if(current_datatype) gid(current_datatype).classList.remove("shown")
             current_datatype = datatype_choice.getAttribute("target");
             // Update the poster
             [...document.getElementsByClassName("datatype-poster")].forEach(ele=>{
@@ -91,12 +105,13 @@ function setup_datatype_links() {
             // Update the datapoints array
             datapoints = gid(current_datatype).querySelector(".datapoint-container").children
             
-            // If classic layout is enabled, select the first one
+            // If classic layout is enabled, focus the first one
             if(is_classic_layout()) {
                 focus_datapoint(datapoints[0])
             }
         }
     }
+    logtime(stime, "setup_datatype_links")
 }
 
 /**
@@ -104,6 +119,7 @@ function setup_datatype_links() {
 */
 
 function setup_close_buttons() {
+    let stime = new Date()
     for(const ele of document.querySelectorAll(".datatype-title > img")) {
         ele.onclick = event=>{
             let datatype_section = ele.parentElement.parentElement
@@ -111,13 +127,10 @@ function setup_close_buttons() {
             gid("datatype-container").classList.remove("shown")
             gid("datapoint-types").classList.add("shown")
             // Stop playing audio, if at all
-            if(focused_datapoint && focused_datapoint.getAttribute("media-type")) {
-                let cum = focused_datapoint.querySelector("audio")
-                cum.pause()
-                cum.currentTime = 0
-            }
+            stop_audio()
         }
     }
+    logtime(stime, "setup_close_buttons")
 }
 
 /**
@@ -127,35 +140,7 @@ function setup_close_buttons() {
 function setup_datapoint_numbers() {
     let stime = new Date();
     // All the datapoints
-    for(const datapoint_container of document.getElementsByClassName("datapoint-container")) {
-        [...datapoint_container.children].forEach((datapoint, index)=>{
-            datapoint.setAttribute("position", index+1)
-            
-            let media_type = datapoint.getAttribute("media-type")
-            if(media_type) {
-                // Prep the play-button
-                let datapoint_audio = datapoint.querySelector(".datapoint-audio")
-                datapoint_audio.onclick = event=>event.stopPropagation()
-                let play_button = datapoint_audio.firstElementChild
-                play_button.onclick = event=>{
-                    event.stopPropagation()
-                    toggle_audio_playback(play_button.previousElementSibling)
-                }
-                // Create the audio element
-                let audio = document.createElement("AUDIO")
-                audio.preload = "metadata"
-                datapoint.lastElementChild.firstElementChild.prepend(audio)
-                audio.src = `Audio/HZD ${media_type} ${index+1}.mp3`
-                audio.addEventListener("timeupdate", function yuh() {
-                    update_progress_bar(this)
-                })
-                audio.onended = event=>{
-                    audio.parentElement.classList.remove("playing")
-                }
-            }
-        })
-    }
-    logtime(stime, "setup_datapoint_numbers (I)")
+    // logtime(stime, "setup_datapoint_numbers (I)")
     // Just the popup element
     let datapoint = gid("popup-content")
     let datapoint_audio = datapoint.querySelector(".datapoint-audio")
@@ -163,7 +148,7 @@ function setup_datapoint_numbers() {
     // print(play_button)
     play_button.onclick = event=>{
         event.stopPropagation()
-        toggle_audio_playback(play_button.previousElementSibling)
+        toggle_audio_playback()
     }
     let audio = datapoint.querySelector("audio")
     audio.addEventListener("timeupdate", function yuh() {
@@ -172,17 +157,79 @@ function setup_datapoint_numbers() {
     audio.onended = event=>{
         audio.parentElement.classList.remove("playing")
     }
+    logtime(stime, "setup_datapoint_numbers")
 }
 
-function close_popup() {
-    POPUP_MODE = false
-    POPUP.element.classList.remove("shown")
-    // Pause if playing
-    if(gid("popup-content").getAttribute("media-type")) {
-        POPUP.audio.classList.remove("playing")
-        POPUP.audio.firstElementChild.pause()
-        POPUP.audio.firstElementChild.currentTime = 0
+/* AUDIO HANDLERS */
+
+function toggle_audio_playback() {
+    if(current_audio.paused) {
+        play_audio()
     }
+    else {
+        pause_audio()
+    }
+}
+
+function update_progress_bar() {
+    if(selected_datapoint) selected_datapoint.getElementsByClassName("progress-bar")[0].style.setProperty("--perc", 100 * current_audio.currentTime / current_audio.duration)
+}
+
+/**
+* Returns the audio associated with the selected_datapoint. If the audio has not been loaded yet, it is loaded. If the datapoint isn't a media-type datapoint, returns `null`
+*/
+
+function play_audio() {
+    current_audio.play()
+    selected_datapoint.classList.add("playing")
+}
+
+/**
+* Pauses the currently playing datapoint audio. No arguments to be passed as the global `current_audio` refers to it anyway.
+*/
+
+function pause_audio() {
+    if(current_audio) {
+        current_audio.pause()
+        selected_datapoint.classList.remove("playing")
+    }
+}
+
+/**
+* Stops the currently playing datapoint audio. No arguments to be passed as the global `current_audio` refers to it anyway.
+*/
+
+function stop_audio() {
+    if(current_audio) {
+        pause_audio()
+        current_audio.currentTime = 0
+    }
+}
+
+/**
+* Loads the audio associated with the selected_datapoint
+*/
+
+function load_audio() {
+    let media_type = selected_datapoint.getAttribute("media-type")
+    if(!media_type) {
+        current_audio = null
+        return null
+    }
+    let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
+    
+    if(all_audios[media_type][datapoint_position-1]) {
+        // If the audio is already loaded:
+        current_audio = all_audios[media_type][datapoint_position-1]
+        return current_audio
+    }
+    // Since the audio hasn't been loaded yet, load it now
+    let audio = new Audio(`../Audio/HZD ${media_type} ${datapoint_position}.mp3`)
+    audio.ontimeupdate = update_progress_bar
+    audio.onended = stop_audio
+    all_audios[media_type][datapoint_position-1] = audio
+    current_audio = audio
+    return all_audios[media_type][datapoint_position-1]
 }
 
 /**
@@ -195,12 +242,12 @@ function set_datapoint_expansion_sizes() {
     // Reading the height of an element causes a reflow to happen so that the layout isn't 'stale'. But the next read won't cause a reflow because the layout isn't stale anymore.
     // Previous code: (read then write) repeat = N read reflows + N style set reflows
     // Current code: read all then write all = 1 read reflow + N style set reflows
-
-    // let stime = new Date()
+    
+    let stime = new Date()
     let arr = Array.from(document.getElementsByClassName("datapoint"))
     let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
     arr.forEach((ele, index)=>ele.style.setProperty('--datapoint-text-size', heights[index]))
-    // logtime(stime, "expansion_sizes");
+    logtime(stime, "set_expansion_sizes");
 }
 
 /**
@@ -213,7 +260,10 @@ function set_datapoint_expansion_sizes() {
 */
 
 function set_datapoint_events() {
-    for(const datapoint of document.getElementsByClassName("datapoint")) {
+    let stime = new Date();
+    [...document.getElementsByClassName("datapoint")].forEach((datapoint, index)=>{
+        datapoint.setAttribute("position", (index%63)+1)
+
         // 1. Set onclick event for datapoint titles
         let datapoint_title = datapoint.firstElementChild
         datapoint_title.onclick = event=>{
@@ -228,13 +278,19 @@ function set_datapoint_events() {
         
         // 3. Set onclick event for datapoints
         datapoint.onclick = event=>{
-            if(is_classic_layout()) {
+            if(event.target.matches(".play-button")) {
+                toggle_audio_playback()
+            }
+            else if(is_classic_layout()) {
                 init_popup(datapoint)
             }
             else select_datapoint()
         }
-    }
+    })
+    logtime(stime, "set_datapoint_events")
 }
+
+/* POPUP HANDLERS */
 
 function init_popup(datapoint) {
     POPUP_MODE = true
@@ -247,11 +303,22 @@ function init_popup(datapoint) {
     // Set the datatype
     POPUP.dtype.innerHTML = current_datatype
     // Set the audio
-    if(mt) POPUP.audio.firstElementChild.src = datapoint.getElementsByTagName("audio")[0].src
+    // if(mt) POPUP.audio.firstElementChild.src = datapoint.getElementsByTagName("audio")[0].src
     // Set the text
     POPUP.text.innerHTML = datapoint.lastElementChild.lastElementChild.innerHTML
     
     POPUP.element.classList.add("shown")
+}
+
+function close_popup() {
+    POPUP_MODE = false
+    POPUP.element.classList.remove("shown")
+    // Pause if playing
+    if(gid("popup-content").getAttribute("media-type")) {
+        POPUP.audio.classList.remove("playing")
+        POPUP.audio.firstElementChild.pause()
+        POPUP.audio.firstElementChild.currentTime = 0
+    }
 }
 
 function focus_datapoint(datapoint) {
@@ -268,23 +335,22 @@ function focus_datapoint(datapoint) {
 }
 
 function select_datapoint() {
-    let current_selected = document.querySelector(".selected")
-    if(current_selected == focused_datapoint) {
-        // print("Removing selection")
-        current_selected.classList.remove("selected")
-        if(current_selected.getAttribute("media-type")) {
-            current_selected.getElementsByTagName("audio")[0].pause()
-            current_selected.getElementsByTagName("audio")[0].currentTime = 0
-            current_selected.getElementsByTagName("audio")[0].parentElement.classList.remove("playing")
-        }
+    if(selected_datapoint == focused_datapoint) {
+        // De-select currently focused datapoint
+        selected_datapoint.classList.remove("selected")
+        stop_audio()
+        selected_datapoint = null
         return
     }
-    if(current_selected) {
-        if(current_selected.getAttribute("media-type")) current_selected.getElementsByTagName("audio")[0].pause()
-        current_selected.classList.remove("selected")
+    if(selected_datapoint) {
+        // De-select currently focused datapoint
+        selected_datapoint.classList.remove("selected")
+        stop_audio()
     }
-    // print("Selecting focused_datapoint")
+    // Select the currently focused datapoint
     focused_datapoint.classList.add("selected")
+    selected_datapoint = focused_datapoint
+    load_audio()
 }
 
 /*
@@ -331,7 +397,7 @@ function prepare_datapoint_expansions() {
 function setup_key_presses() {
     document.body.onkeydown = event=>{
         let key = event.key
-
+        
         // If popup is enabled
         if(POPUP_MODE) {
             if(key == "f") {
@@ -342,7 +408,7 @@ function setup_key_presses() {
             }
             return;
         }
-
+        
         if (key == "q") {
             go_to_previous_page()
         }
@@ -417,19 +483,4 @@ function toggle_layout() {
     
     // Necessary because display: none causes the first time to not work
     // set_datapoint_expansion_sizes()
-}
-
-function toggle_audio_playback(audio_element) {
-    if(audio_element.paused) {
-        audio_element.play()
-        audio_element.parentElement.classList.add("playing")
-    }
-    else {
-        audio_element.pause()
-        audio_element.parentElement.classList.remove("playing")
-    }
-}
-
-function update_progress_bar(audio_element) {
-    audio_element.parentElement.style = `--perc: ${100 * audio_element.currentTime / audio_element.duration}%`
 }
