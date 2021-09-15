@@ -113,7 +113,7 @@ section#datapoint-types {
     .datapoint-choice.datatype-selected {
         color: var(--selection-yellow);
     }
-
+    
     .datatype-selected > .audio-icon {content: url(../Images/datapoint-icon-audio-yellow.png);}
     .datatype-selected > .hologram-icon {content: url(../Images/datapoint-icon-hologram-yellow.png);}
     .datatype-selected > .text-icon {content: url(../Images/datapoint-icon-text-yellow.png);}
@@ -289,6 +289,7 @@ section.datatype.shown {
 }
 
 .datapoint-container {
+    --shift: 0;
     --columns: 1;
     height: fit-content;
     width: calc(100% - 20px);
@@ -300,11 +301,28 @@ section.datatype.shown {
 /* Finally, datapoints themselves */
 
 .datapoint {
+    /* --shift: 0; */
+    transition: transform 250ms ease;
     width: 100%;
     user-select: none;
     counter-increment: datapoint-number;
     --datapoint-audio-height: 0em;
-    --datapoint-text-max-height: 8em;
+}
+
+.selected ~ .datapoint {
+    /* Don't ask me why 3em instead of 5em, it just works */
+    transform: translateY(calc(10px + (var(--shift) * 1px)));
+}
+
+.selected ~ .datapoint[media-type] {
+    /* Don't ask me why 3em instead of 5em, it just works */
+    transform: translateY(calc(10px + 3em + (var(--shift) * 1px)));
+}
+
+@media (min-width: 1024px) {
+    .classic-layout .datapoint {
+        transform: none !important;
+    }
 }
 
 .datapoint[media-type] {
@@ -366,8 +384,9 @@ section.datatype.shown {
     font-family: 'Inconsolata', monospace;
     font-size: 18px;
     height: 0;
-    overflow: hidden;
-    transition: height 250ms ease;
+    opacity: 0;
+    /* overflow: hidden; */
+    transition: opacity 250ms ease;
 }
 
 @media (min-width: 1024px) {
@@ -378,7 +397,7 @@ section.datatype.shown {
 }
 
 .datapoint.selected > .datapoint-content {
-    height: calc(var(--datapoint-audio-height) + var(--datapoint-text-size) * 1px + 10px);
+    opacity: 1;
 }
 
 .datapoint-audio {
@@ -429,7 +448,7 @@ section.datatype.shown {
     background: url(../Images/play-button.png) center/cover no-repeat;
 }
 
-.datapoint.playing .play-button {
+.playing .play-button {
     background-image: url(../Images/pause-button.png);
 }
 
@@ -472,7 +491,7 @@ text :is(p, dl, code) {
 
 /* Datapoint Popup */
 
-#datapoint-popup {
+body #datapoint-popup {
     display: none;
 }
 
@@ -492,7 +511,7 @@ section#desktop-sidebar {
         opacity: 1;
         transition: opacity 250ms ease;
     }
-
+    
     section#datatype-container:not(.shown) + section#desktop-sidebar {
         opacity: 0;
     }
@@ -538,7 +557,7 @@ section#desktop-sidebar {
     
     .classic-layout .datapoint {
         width: 100%;
-
+        
         position: relative;
         aspect-ratio: 1 / 1;
         
@@ -559,7 +578,7 @@ section#desktop-sidebar {
     .classic-layout #Hologram .datapoint::before {background-image: url(../Images/datapoint-icon-hologram.png);}
     .classic-layout :is(#Text-Quest, #Text-World, #Text-Machines) .datapoint::before {background-image: url(../Images/datapoint-icon-text.png);}
     .classic-layout #Scanned-Glyphs .datapoint::before {background-image: url(../Images/datapoint-icon-scanned-glyphs.png);}
-
+    
     .classic-layout #Audio .datapoint.focused::before {background-image: url(../Images/datapoint-icon-audio-yellow.png);}
     .classic-layout #Hologram .datapoint.focused::before {background-image: url(../Images/datapoint-icon-hologram-yellow.png);}
     .classic-layout :is(#Text-Quest, #Text-World, #Text-Machines) .datapoint.focused::before {background-image: url(../Images/datapoint-icon-text-yellow.png);}
@@ -568,9 +587,13 @@ section#desktop-sidebar {
     .classic-layout .datapoint > * {
         display: none;
     }
-
+    
     /* The desktop popup */
 
+    body:not(.classic-layout) #datapoint-popup {
+        display: none !important;
+    }
+    
     #datapoint-popup.shown {
         position: absolute;
         top: 0;
@@ -580,28 +603,28 @@ section#desktop-sidebar {
         z-index: 999;
         display: block;
     }
-
-    #datapoint-popup.shown + #page {
+    
+    .classic-layout #datapoint-popup.shown + #page {
         opacity: 0 !important;
         user-select: none !important;
         pointer-events: none !important;
     }
-
+    
     #popup-main {
         display: flex;
         justify-content: center;
         align-items: stretch;
         height: 90vh;
     }
-
+    
     #popup-main > #popup-content {
         flex: 6 0 0;
-
+        
         display: flex;
         justify-content: center;
         align-items: center;
     }
-
+    
     #popup-info {
         /* background-color: burlywood; */
         width: 75%;
@@ -611,7 +634,7 @@ section#desktop-sidebar {
         justify-content: center;
         align-items: center;
     }
-
+    
     #popup-info > header {
         width: 100%;
         display: flex;
@@ -624,22 +647,22 @@ section#desktop-sidebar {
         text-align: center;
         padding: 0;
     }
-
+    
     #popup-info > span {
         font-size: 2em;
         color: var(--steel-blue);
     }
-
+    
     #popup-info > .datapoint-audio {
         height: 6em;
         margin: 10px 0;
         width: 50%;
     }
-
+    
     #popup-content:not([media-type]) .datapoint-audio {
         display: none;
     } 
-
+    
     #popup-info > #popup-text {
         padding-right: 10px;
         font-family: 'Inconsolata', monospace;
@@ -649,7 +672,7 @@ section#desktop-sidebar {
         color:rgba(255, 255, 255, 0.85);
         overflow: auto;
     }
-
+    
     #popup-text::-webkit-scrollbar {
         width: 8px;
         background: url(../Images/scrollbar-veretical.png) center/cover no-repeat;
@@ -658,7 +681,7 @@ section#desktop-sidebar {
     #popup-text::-webkit-scrollbar-thumb {
         background: url(../Images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
     }
-
+    
     #popup-main > #poster-img {
         flex: 4 0 0;
         display: flex;
@@ -666,16 +689,16 @@ section#desktop-sidebar {
         justify-content: center;
         align-items: flex-start;
     }
-
+    
     #poster-img > img {
         max-width: 100%;
         max-height: 100%;
     }
-
+    
     #datapoint-popup > .controls-container {
         padding: 0 10%;
         height: 10vh;
-
+        
         display: flex;
         justify-content: space-between;
         align-items: center;

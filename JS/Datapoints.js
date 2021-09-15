@@ -47,16 +47,28 @@ function setup_local() {
         text: text
     }
     
-    setup_datatype_links() // Verified
-    setup_close_buttons() // Verified
-    set_datapoint_events() // Verified
-    set_datapoint_expansion_sizes() // Verified
+    setup_datatype_links()
+    setup_close_buttons()
+    prepare_datapoints()
     setup_key_presses()
+    init_popup()
     document.body.classList.add("classic-layout")
 }
 
 function resize_handler_local() {
-    set_datapoint_expansion_sizes()
+    let stime = new Date()
+    let arr = Array.from(document.getElementsByClassName("datapoint"))
+    let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
+    arr.forEach((ele, index)=>ele.style.setProperty('--datapoint-text-size', heights[index]))
+    if(selected_datapoint) {
+        let offsetHeight = getComputedStyle(selected_datapoint).getPropertyValue("--datapoint-text-size")
+        let nxt = selected_datapoint.nextElementSibling
+        while(nxt) {
+            nxt.style.setProperty("--shift", offsetHeight)
+            nxt = nxt.nextElementSibling
+        }
+    }
+    logtime(stime, "resize_handler_local")
 }
 
 /**
@@ -76,11 +88,13 @@ function setup_datatype_links() {
     let stime = new Date()
     for(const datatype_choice of gid("datapoint-types-inner").children) {
         datatype_choice.onclick = event=>{
+            event.stopPropagation()
+            let stime = new Date()
             // If you clicked on the currently selected datatype choice, then ignore
-            let current_datatype_choice = document.getElementsByClassName("datatype-selected")[0]
-            if(current_datatype_choice == datatype_choice) return
+            let current_datatype_choice = datatype_choice.parentElement.getElementsByClassName("datatype-selected")[0]
+            if(current_datatype && current_datatype_choice == datatype_choice) return
             // If it is another choice, de-select it and hide its corresponding section
-            if(current_datatype_choice) {
+            if(current_datatype) {
                 current_datatype_choice.classList.remove("datatype-selected")
                 gid(current_datatype).classList.remove("shown")
                 // EXTRA: Stop the currently playing audio and de-select the selected datapoint
@@ -90,6 +104,7 @@ function setup_datatype_links() {
                     selected_datapoint = null
                 }
             }
+            
             datatype_choice.classList.add("datatype-selected")
             current_datatype = datatype_choice.getAttribute("target");
             // Update the poster
@@ -103,12 +118,11 @@ function setup_datatype_links() {
             // Hide the datatype-choser section (this too is for mobile only)
             gid("datapoint-types").classList.remove("shown")
             // Update the datapoints array
-            datapoints = gid(current_datatype).querySelector(".datapoint-container").children
+            datapoints = gid(current_datatype).getElementsByClassName("datapoint-container")[0].children
             
-            // If classic layout is enabled, focus the first one
-            if(is_classic_layout()) {
-                focus_datapoint(datapoints[0])
-            }
+            focus_datapoint(datapoints[0])
+            
+            logtime(stime, "link_event")
         }
     }
     logtime(stime, "setup_datatype_links")
@@ -128,6 +142,7 @@ function setup_close_buttons() {
             gid("datapoint-types").classList.add("shown")
             // Stop playing audio, if at all
             stop_audio()
+            current_datatype = ""
         }
     }
     logtime(stime, "setup_close_buttons")
@@ -137,27 +152,55 @@ function setup_close_buttons() {
 * Assigns a position attribute to every datapoint under every datapoint-container, starting from 1
 */
 
-function setup_datapoint_numbers() {
+function init_popup() {
     let stime = new Date();
-    // All the datapoints
-    // logtime(stime, "setup_datapoint_numbers (I)")
     // Just the popup element
-    let datapoint = gid("popup-content")
-    let datapoint_audio = datapoint.querySelector(".datapoint-audio")
-    let play_button = datapoint_audio.children[1]
-    // print(play_button)
-    play_button.onclick = event=>{
-        event.stopPropagation()
-        toggle_audio_playback()
-    }
-    let audio = datapoint.querySelector("audio")
-    audio.addEventListener("timeupdate", function yuh() {
-        update_progress_bar(this)
-    })
-    audio.onended = event=>{
-        audio.parentElement.classList.remove("playing")
-    }
+    let play_button = POPUP.element.getElementsByClassName("play-button")[0]
+    play_button.onclick = toggle_audio_playback
     logtime(stime, "setup_datapoint_numbers")
+}
+
+/**
+* Multipurpose function
+* 1. Sets onclick events to datapoint titles such that in list mode when clicked, select_element() is called on that datapoint. Actually, you don't need to check for list mode here, since titles are shown ONLY in list mode anyway.
+* 2. Sets onmouseover events to datapoints such that when hovered, focus_element() is called on that datapoint
+* 3. Sets onclick events to datapoints such that in classic mode when clicked, select_element() is called on that datapoint
+* 
+* So to recap, select_element() is called on an element if the header is clicked in list mode, or if the datapoint is clicked in classic mode
+*/
+
+function prepare_datapoints() {
+    let stime = new Date();
+    let arr = Array.from(document.getElementsByClassName("datapoint"))
+    // Temporary array to store all computed heights of the datapoints, so that reflow occurs only during the initial read (i.e. once)
+    let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
+    arr.forEach((datapoint, index)=>{
+        datapoint.setAttribute("position", (index%63)+1)
+        
+        datapoint.style.setProperty('--datapoint-text-size', heights[index])
+        
+        // 2. Set onmouseover event for datapoints
+        datapoint.onmouseover = event=>{
+            focus_datapoint(datapoint)
+        }
+        
+        // 3. Set onclick event for datapoints
+        datapoint.onclick = event=>{
+            print(event.target)
+            if(event.target.matches(".play-button")) {
+                toggle_audio_playback()
+            }
+            else if(event.target.matches(".datapoint-title, .datapoint-title > header")) {
+                event.stopPropagation()
+                select_datapoint()
+            }
+            else {
+                print("YUHCUM")
+                select_datapoint()
+            }
+        }
+    })
+    logtime(stime, "set_datapoint_events")
 }
 
 /* AUDIO HANDLERS */
@@ -172,7 +215,11 @@ function toggle_audio_playback() {
 }
 
 function update_progress_bar() {
-    if(selected_datapoint) selected_datapoint.getElementsByClassName("progress-bar")[0].style.setProperty("--perc", 100 * current_audio.currentTime / current_audio.duration)
+    if(selected_datapoint && current_audio) {
+        let perc = 100 * current_audio.currentTime / current_audio.duration
+        selected_datapoint.getElementsByClassName("progress-bar")[0].style.setProperty("--perc", perc)
+        POPUP.audio.lastElementChild.style.setProperty("--perc", perc)
+    }
 }
 
 /**
@@ -181,7 +228,8 @@ function update_progress_bar() {
 
 function play_audio() {
     current_audio.play()
-    selected_datapoint.classList.add("playing")
+    selected_datapoint?.classList.add("playing")
+    POPUP.audio.classList.add("playing")
 }
 
 /**
@@ -191,7 +239,8 @@ function play_audio() {
 function pause_audio() {
     if(current_audio) {
         current_audio.pause()
-        selected_datapoint.classList.remove("playing")
+        selected_datapoint?.classList.remove("playing")
+        POPUP.audio.classList.remove("playing")
     }
 }
 
@@ -232,93 +281,32 @@ function load_audio() {
     return all_audios[media_type][datapoint_position-1]
 }
 
-/**
-* Adds a css variable `--datapoint-text-size` to all datapoint elements which indicates how much the datapoint-content will expand to.
-* It's based on the height of the text element inside .datapoint-content
-*/
-
-function set_datapoint_expansion_sizes() {
-    // IM A FUCKING GOD
-    // Reading the height of an element causes a reflow to happen so that the layout isn't 'stale'. But the next read won't cause a reflow because the layout isn't stale anymore.
-    // Previous code: (read then write) repeat = N read reflows + N style set reflows
-    // Current code: read all then write all = 1 read reflow + N style set reflows
-    
-    let stime = new Date()
-    let arr = Array.from(document.getElementsByClassName("datapoint"))
-    let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
-    arr.forEach((ele, index)=>ele.style.setProperty('--datapoint-text-size', heights[index]))
-    logtime(stime, "set_expansion_sizes");
-}
-
-/**
-* Multipurpose function
-* 1. Sets onclick events to datapoint titles such that in list mode when clicked, select_element() is called on that datapoint. Actually, you don't need to check for list mode here, since titles are shown ONLY in list mode anyway.
-* 2. Sets onmouseover events to datapoints such that when hovered, focus_element() is called on that datapoint
-* 3. Sets onclick events to datapoints such that in classic mode when clicked, select_element() is called on that datapoint
-* 
-* So to recap, select_element() is called on an element if the header is clicked in list mode, or if the datapoint is clicked in classic mode
-*/
-
-function set_datapoint_events() {
-    let stime = new Date();
-    [...document.getElementsByClassName("datapoint")].forEach((datapoint, index)=>{
-        datapoint.setAttribute("position", (index%63)+1)
-
-        // 1. Set onclick event for datapoint titles
-        let datapoint_title = datapoint.firstElementChild
-        datapoint_title.onclick = event=>{
-            event.stopPropagation()
-            select_datapoint()
-        }
-        
-        // 2. Set onmouseover event for datapoints
-        datapoint.onmouseover = event=>{
-            focus_datapoint(datapoint)
-        }
-        
-        // 3. Set onclick event for datapoints
-        datapoint.onclick = event=>{
-            if(event.target.matches(".play-button")) {
-                toggle_audio_playback()
-            }
-            else if(is_classic_layout()) {
-                init_popup(datapoint)
-            }
-            else select_datapoint()
-        }
-    })
-    logtime(stime, "set_datapoint_events")
-}
-
 /* POPUP HANDLERS */
 
-function init_popup(datapoint) {
+function show_popup() {
     POPUP_MODE = true
     // Due to the layout of datapoints and my shit naming system, #popup-content acts like the datapoint div, so add the media-type to it
-    let mt = datapoint.getAttribute("media-type")
+    print("START POPUP")
+    let mt = selected_datapoint.getAttribute("media-type")
     if(mt) gid("popup-content").setAttribute("media-type", mt)
     else gid("popup-content").removeAttribute("media-type")
     // Set the header
-    POPUP.header.innerHTML = datapoint.firstElementChild.firstElementChild.innerHTML
+    POPUP.header.innerHTML = selected_datapoint.firstElementChild.firstElementChild.innerHTML
     // Set the datatype
     POPUP.dtype.innerHTML = current_datatype
-    // Set the audio
-    // if(mt) POPUP.audio.firstElementChild.src = datapoint.getElementsByTagName("audio")[0].src
     // Set the text
-    POPUP.text.innerHTML = datapoint.lastElementChild.lastElementChild.innerHTML
+    POPUP.text.innerHTML = selected_datapoint.lastElementChild.lastElementChild.innerHTML
+    print("END POPUP")
     
     POPUP.element.classList.add("shown")
 }
 
 function close_popup() {
     POPUP_MODE = false
+    select_datapoint()
     POPUP.element.classList.remove("shown")
     // Pause if playing
-    if(gid("popup-content").getAttribute("media-type")) {
-        POPUP.audio.classList.remove("playing")
-        POPUP.audio.firstElementChild.pause()
-        POPUP.audio.firstElementChild.currentTime = 0
-    }
+    stop_audio()
 }
 
 function focus_datapoint(datapoint) {
@@ -338,6 +326,12 @@ function select_datapoint() {
     if(selected_datapoint == focused_datapoint) {
         // De-select currently focused datapoint
         selected_datapoint.classList.remove("selected")
+        // Remove the offset
+        let nxt = selected_datapoint.nextElementSibling
+        while(nxt) {
+            nxt.style.setProperty("--shift", "0")
+            nxt = nxt.nextElementSibling
+        }
         stop_audio()
         selected_datapoint = null
         return
@@ -350,51 +344,20 @@ function select_datapoint() {
     // Select the currently focused datapoint
     focused_datapoint.classList.add("selected")
     selected_datapoint = focused_datapoint
+    let offsetHeight = getComputedStyle(selected_datapoint).getPropertyValue("--datapoint-text-size")
+    let nxt = selected_datapoint.nextElementSibling
+    while(nxt) {
+        nxt.style.setProperty("--shift", offsetHeight)
+        nxt = nxt.nextElementSibling
+    }
     load_audio()
-}
-
-/*
-Aight
-So
-When you hover over a datapoint, you give them a selected class and put their value into the info sidebar
-But only when you click it does the popup get initialized
-it's good because on mobile hover = click so they become yellow + their datapoint content is shown
-*/
-
-function prepare_datapoint_expansions() {
-    for(const ele of document.getElementsByClassName("datapoint-title")) {
-        // Set the onclick event
-        let parent = ele.parentElement
-        // The following onclick handler is ONLY for list layout, where if you click the header, the content expands
-        ele.onclick = event=>{
-            if(is_classic_layout()) return;
-            if(parent.classList.contains("selected")) {
-                parent.classList.remove("selected")
-                return
-            }
-            document.querySelector(".selected")?.classList.remove("selected")
-            parent.classList.add("selected");
-        }
-    }
-    // The following onmouseover handler is ONLY for classic layout. If a datapoint is hovered over, it gets the class 'selected', 
-    for(const ele of document.getElementsByClassName("datapoint")) {
-        ele.onmouseover = event=>{
-            if(!is_classic_layout() || ele.classList.contains("selected")) return;
-            // print("MOUSEOVERED")
-            document.querySelector(".selected").classList.remove("selected")
-            ele.classList.add("selected");
-            new Audio("click2.mp3").play()
-        }
-        ele.onclick = event=>{
-            if(!is_classic_layout()) return;
-            activate_datapoint(ele)
-        }
-    }
+    show_popup()
 }
 
 // Overrides the main.js setup_key_presses()
 
 function setup_key_presses() {
+    let stime = new Date()
     document.body.onkeydown = event=>{
         let key = event.key
         
@@ -408,7 +371,7 @@ function setup_key_presses() {
             }
             return;
         }
-        
+        // POPUP is definitely not enabled
         if (key == "q") {
             go_to_previous_page()
         }
@@ -421,8 +384,8 @@ function setup_key_presses() {
             toggle_layout()
         }
         else if(key == "f") {
-            if(is_classic_layout()) init_popup(focused_datapoint)
-            else select_datapoint()
+            select_datapoint()
+            show_popup()
         }
         else if(is_classic_layout()) {
             // Since this is a classic layout, we need to traverse the grid
@@ -468,19 +431,14 @@ function setup_key_presses() {
             print(key)
         }
     }
+    logtime(stime, "setup_key_presses")
 }
 
 function toggle_layout() {
-    // print("Tab pressed")
-    
     if (document.body.classList.contains("classic-layout")) {
-        // Switch to list layout
         document.body.classList.remove("classic-layout")
     }
     else {
         document.body.classList.add("classic-layout")
     }
-    
-    // Necessary because display: none causes the first time to not work
-    // set_datapoint_expansion_sizes()
 }

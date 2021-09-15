@@ -43,6 +43,7 @@
                     <span>Audio Datapoint</span>
                     <!--Span is for the datatype-->
                     <div class="datapoint-audio">
+                        <audio></audio>
                         <div class="play-button"></div>
                         <div class="progress-bar"></div>
                     </div>
@@ -59,7 +60,7 @@
                 <div class="control-key">ESC</div>
                 Back
             </div>
-            <div id="select-button" onclick="toggle_audio_playback()">
+            <div id="select-button" onclick="toggle_audio_playback(POPUP.audio.firstElementChild)">
                 <div class="control-key">F</div>
                 Play / Pause
             </div>
@@ -7875,6 +7876,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="meme.js"></script>
     <script src="JS/main.js"></script>
     <script src="JS/Datapoints.js"></script>
     <script>

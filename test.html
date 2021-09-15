@@ -15,18 +15,36 @@
             color: white;
             margin: 0;
             padding: 0;
-            background-color: black;
+            height: 100vh;
+            background: url(Images/Background-min.png) center/cover no-repeat;
             position: relative;
+        }
+
+        div {
+            position: absolute;
+            inset: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #bkg {
+            /* mix-blend-mode: color; */
+            /* background-color: white; */
+        }
+
+        #main {
+            /* background: url(Images/Background\ -\ Centered.png) center/cover no-repeat; */
+            background-color: rgba(255, 255, 0, 0);
+            mix-blend-mode: color;
         }
     </style>
 </head>
 <body>
-    <div id="parent">
-        <div>
-            <h2>
-                Text here
-            </h2>
-        </div>
+    <div id='bkg'>
+
+    </div>
+    <div id="main">
+        main stuff here
     </div>
 
     <script>
