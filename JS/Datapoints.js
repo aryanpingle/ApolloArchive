@@ -149,18 +149,6 @@ function setup_close_buttons() {
 }
 
 /**
-* Assigns a position attribute to every datapoint under every datapoint-container, starting from 1
-*/
-
-function init_popup() {
-    let stime = new Date();
-    // Just the popup element
-    let play_button = POPUP.element.getElementsByClassName("play-button")[0]
-    play_button.onclick = toggle_audio_playback
-    logtime(stime, "setup_datapoint_numbers")
-}
-
-/**
 * Multipurpose function
 * 1. Sets onclick events to datapoint titles such that in list mode when clicked, select_element() is called on that datapoint. Actually, you don't need to check for list mode here, since titles are shown ONLY in list mode anyway.
 * 2. Sets onmouseover events to datapoints such that when hovered, focus_element() is called on that datapoint
@@ -280,6 +268,18 @@ function load_audio() {
 }
 
 /* POPUP HANDLERS */
+
+/**
+ * Initializes the popup format
+*/
+
+function init_popup() {
+    let stime = new Date();
+    // Just the popup element
+    let play_button = POPUP.element.getElementsByClassName("play-button")[0]
+    play_button.onclick = toggle_audio_playback
+    logtime(stime, "setup_datapoint_numbers")
+}
 
 function show_popup() {
     POPUP_MODE = true
