@@ -69,7 +69,7 @@ section#datapoint-types {
     section#datapoint-types {
         /* background-color: aqua; */
         
-        flex: 4 0 0;
+        flex: 8 0 0;
         justify-content: start;
     }
 }
@@ -158,7 +158,7 @@ section#datatype-container {
 @media (min-width: 1024px) {
     section#datatype-container {
         pointer-events: none;
-        flex: 10 0 0;
+        flex: 20 0 0;
         /* width: fit-content; */
     }
     
@@ -503,7 +503,7 @@ section#desktop-sidebar {
 
 @media (min-width: 1024px) {
     section#desktop-sidebar {
-        flex: 5 0 0;
+        flex: 11 0 0;
         display: flex;
         flex-direction: column;
         justify-content: center;

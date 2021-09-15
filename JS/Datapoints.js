@@ -174,8 +174,9 @@ function prepare_datapoints() {
     let arr = Array.from(document.getElementsByClassName("datapoint"))
     // Temporary array to store all computed heights of the datapoints, so that reflow occurs only during the initial read (i.e. once)
     let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
+    let acc = 0
     arr.forEach((datapoint, index)=>{
-        datapoint.setAttribute("position", (index%63)+1)
+        datapoint.setAttribute("position", [...datapoint.parentElement.children].indexOf(datapoint)+1)
         
         datapoint.style.setProperty('--datapoint-text-size', heights[index])
         
@@ -369,7 +370,7 @@ function setup_key_presses() {
             else if(key == "Escape") {
                 close_popup()
             }
-            return;
+            return
         }
         // POPUP is definitely not enabled
         if (key == "q") {
@@ -385,12 +386,11 @@ function setup_key_presses() {
         }
         else if(key == "f") {
             select_datapoint()
-            show_popup()
         }
         else if(is_classic_layout()) {
             // Since this is a classic layout, we need to traverse the grid
             let columns = parseInt(getComputedStyle(gid(current_datatype).querySelector(".datapoint-container")).getPropertyValue("--columns"))
-            let new_index = 0;
+            let new_index = 0
             let position = parseInt(focused_datapoint.getAttribute("position"))
             if(key == "w" || key == "ArrowUp") {
                 new_index = position-columns
@@ -407,7 +407,6 @@ function setup_key_presses() {
             else {
                 return
             }
-            // print(`New Index: ${new_index}`)
             focus_datapoint(datapoints[Math.max(1, Math.min(datapoints.length, new_index))-1])
         }
         // At this point it definitely isn't classic layout, so assume this is all for list layout
