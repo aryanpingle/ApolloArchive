@@ -174,7 +174,6 @@ function prepare_datapoints() {
     let arr = Array.from(document.getElementsByClassName("datapoint"))
     // Temporary array to store all computed heights of the datapoints, so that reflow occurs only during the initial read (i.e. once)
     let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
-    let acc = 0
     arr.forEach((datapoint, index)=>{
         datapoint.setAttribute("position", [...datapoint.parentElement.children].indexOf(datapoint)+1)
         
@@ -187,7 +186,6 @@ function prepare_datapoints() {
         
         // 3. Set onclick event for datapoints
         datapoint.onclick = event=>{
-            print(event.target)
             if(event.target.matches(".play-button")) {
                 toggle_audio_playback()
             }
@@ -196,7 +194,6 @@ function prepare_datapoints() {
                 select_datapoint()
             }
             else {
-                print("YUHCUM")
                 select_datapoint()
             }
         }
@@ -287,7 +284,6 @@ function load_audio() {
 function show_popup() {
     POPUP_MODE = true
     // Due to the layout of datapoints and my shit naming system, #popup-content acts like the datapoint div, so add the media-type to it
-    print("START POPUP")
     let mt = selected_datapoint.getAttribute("media-type")
     if(mt) gid("popup-content").setAttribute("media-type", mt)
     else gid("popup-content").removeAttribute("media-type")
@@ -297,7 +293,6 @@ function show_popup() {
     POPUP.dtype.innerHTML = current_datatype
     // Set the text
     POPUP.text.innerHTML = selected_datapoint.lastElementChild.lastElementChild.innerHTML
-    print("END POPUP")
     
     POPUP.element.classList.add("shown")
 }
