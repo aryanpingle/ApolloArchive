@@ -354,16 +354,19 @@ function select_datapoint() {
 
 function setup_key_presses() {
     let stime = new Date()
-    document.body.onkeydown = event=>{
+    window.onkeydown = event=>{
         let key = event.key
         
         // If popup is enabled
-        if(POPUP_MODE) {
+        if(POPUP_MODE && is_classic_layout()) {
             if(key == "f") {
                 toggle_audio_playback(POPUP.audio.firstElementChild)
             }
             else if(key == "Escape") {
                 close_popup()
+            }
+            else {
+                print(key)
             }
             return
         }
@@ -374,7 +377,7 @@ function setup_key_presses() {
         else if (key=="e") {
             go_to_next_page()
         }
-        else if(key == "Tab") {
+        else if(key == "CapsLock") {
             event.preventDefault()
             
             toggle_layout()
@@ -383,6 +386,7 @@ function setup_key_presses() {
             select_datapoint()
         }
         else if(is_classic_layout()) {
+            if(!["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"].includes(key)) return
             // Since this is a classic layout, we need to traverse the grid
             let columns = parseInt(getComputedStyle(gid(current_datatype).querySelector(".datapoint-container")).getPropertyValue("--columns"))
             let new_index = 0
@@ -422,6 +426,7 @@ function setup_key_presses() {
             }
         }
         else {
+            print("koi")
             print(key)
         }
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,8 +10,10 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="CSS/main.css">
-    <link rel="stylesheet" href="CSS/Datapoints.css">
+    <link rel="stylesheet" href="CSS/About.css">
+    <script>var STIME = new Date();</script>
 </head>
+
 <body>
     <nav id="mobile-nav">
         <div id="nav-header">
@@ -26,7 +29,6 @@
         <div class="nav-body">
             <a href="About.html">About</a>
             <a href="Datapoints.html">Datapoints</a>
-            <a href="GAIA.html">GAIA</a>
             <a href="FAQ.html">FAQ</a>
         </div>
     </nav>
@@ -36,38 +38,31 @@
             <div class="nav-body">
                 <a href="About.html">About</a>
                 <a href="Datapoints.html">Datapoints</a>
-                <a href="GAIA.html">GAIA</a>
                 <a href="FAQ.html">FAQ</a>
             </div>
             <div id="navigate-right">E</div>
         </nav>
         <div id="page-content">
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
-            Bruh moment here<br>
+            <div id="main-container">
+
+            </div>
         </div>
     </div>
     
     <!-- Scripts -->
     <script src="JS/main.js"></script>
-    <script src="JS/Datapoints.js"></script>
+    <script>
+        window.onload = () => {
+            logtime(STIME, "HTML PARSING")
+            let stime = new Date()
+            setup_main()
+            logtime(stime, "setup", "violet")
+        }
+        
+        window.onresize = () => {
+            resize_handler_main()
+        }
+    </script>
 </body>
+
 </html>
