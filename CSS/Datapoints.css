@@ -703,6 +703,12 @@ section#desktop-sidebar {
         justify-content: space-between;
         align-items: center;
     }
+
+    #popup-main:not([media-type]) + .controls-container #toggle-play-button {
+        opacity: 0;
+        user-select: none;
+        pointer-events: none;
+    }
 }
 
 /* Just for convenience */

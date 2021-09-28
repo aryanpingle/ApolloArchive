@@ -76,7 +76,7 @@ function resize_handler_local() {
 */
 
 function is_classic_layout() {
-    return !mobile_mode && document.body.classList.contains("classic-layout");
+    return !mobile_mode && document.body.classList.contains("classic-layout")
 }
 
 /**
@@ -158,7 +158,7 @@ function setup_close_buttons() {
 */
 
 function prepare_datapoints() {
-    let stime = new Date();
+    let stime = new Date()
     let arr = Array.from(document.getElementsByClassName("datapoint"))
     // Temporary array to store all computed heights of the datapoints, so that reflow occurs only during the initial read (i.e. once)
     let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
@@ -214,7 +214,9 @@ function update_progress_bar() {
 
 function play_audio() {
     current_audio.play()
-    selected_datapoint?.classList.add("playing")
+    if(selected_datapoint) {
+        selected_datapoint.classList.add("playing")
+    }
     POPUP.audio.classList.add("playing")
 }
 
@@ -225,7 +227,9 @@ function play_audio() {
 function pause_audio() {
     if(current_audio) {
         current_audio.pause()
-        selected_datapoint?.classList.remove("playing")
+        if(selected_datapoint) {
+            selected_datapoint.classList.remove("playing")
+        }
         POPUP.audio.classList.remove("playing")
     }
 }
@@ -238,6 +242,7 @@ function stop_audio() {
     if(current_audio) {
         pause_audio()
         current_audio.currentTime = 0
+        POPUP.audio.lastElementChild.style="--perc:0"
     }
 }
 
@@ -274,7 +279,7 @@ function load_audio() {
 */
 
 function init_popup() {
-    let stime = new Date();
+    let stime = new Date()
     // Just the popup element
     let play_button = POPUP.element.getElementsByClassName("play-button")[0]
     play_button.onclick = toggle_audio_playback
@@ -285,8 +290,14 @@ function show_popup() {
     POPUP_MODE = true
     // Due to the layout of datapoints and my shit naming system, #popup-content acts like the datapoint div, so add the media-type to it
     let mt = selected_datapoint.getAttribute("media-type")
-    if(mt) gid("popup-content").setAttribute("media-type", mt)
-    else gid("popup-content").removeAttribute("media-type")
+    if(mt) {
+        gid("popup-content").setAttribute("media-type", mt)
+        gid("popup-main").setAttribute("media-type", mt)
+    }
+    else {
+        gid("popup-content").removeAttribute("media-type")
+        gid("popup-main").removeAttribute("media-type")
+    }
     // Set the header
     POPUP.header.innerHTML = selected_datapoint.firstElementChild.firstElementChild.innerHTML
     // Set the datatype
@@ -299,14 +310,14 @@ function show_popup() {
 
 function close_popup() {
     POPUP_MODE = false
-    select_datapoint()
-    POPUP.element.classList.remove("shown")
     // Pause if playing
     stop_audio()
+    select_datapoint()
+    POPUP.element.classList.remove("shown")
 }
 
 function focus_datapoint(datapoint) {
-    if(focused_datapoint == datapoint) return;
+    if(focused_datapoint == datapoint) return
     // print("Changing focused_datapoint")
     if(focused_datapoint) {
         focused_datapoint.classList.remove("focused")
