@@ -110,7 +110,8 @@ nav#mobile-nav > #nav-header {
 
 #toggle-nav > img {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     transition: opacity 250ms ease;
