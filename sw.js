@@ -1,17 +1,13 @@
-const log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
+// const log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
+const log = e=>e
 
-const VERSION = 2.00
+const VERSION = 2.10
 const CURRENT_CACHE = `v${VERSION.toFixed(2)}`
-const CACHE_FILES = ["/"]
 
 self.addEventListener("install", event => {
     event.waitUntil(
         caches
             .open(CURRENT_CACHE)
-            .then(cache => {
-                let promises = CACHE_FILES.map(cache_file => cache.add(cache_file))
-                return Promise.allSettled(promises).then(data => cache)
-            })
             .then(cache => self.skipWaiting())
     )
 });
@@ -58,7 +54,7 @@ async function get_cache_request(request_event) {
             return match
         }
         // It's not an audio file, so cache it first then send it
-        caches.open(CURRENT_CACHE).then(cache => cache.add(request_event.request))
+        caches.open(CURRENT_CACHE).then(cache => cache.put(request_event.request, match))
         return match
     })
 }
