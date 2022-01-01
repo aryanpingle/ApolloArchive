@@ -1,7 +1,7 @@
 // const log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
 const log = e=>e
 
-const VERSION = 2.10
+const VERSION = 2.20
 const CURRENT_CACHE = `v${VERSION.toFixed(2)}`
 
 self.addEventListener("install", event => {
@@ -54,8 +54,11 @@ async function get_cache_request(request_event) {
             return match
         }
         // It's not an audio file, so cache it first then send it
-        caches.open(CURRENT_CACHE).then(cache => cache.put(request_event.request, match))
-        return match
+        return match.then(response => {
+            let response_clone = response.clone()
+            caches.open(CURRENT_CACHE).then(cache => cache.put(request_event.request, response))
+            return response_clone
+        })
     })
 }
 
