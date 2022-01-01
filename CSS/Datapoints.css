@@ -530,7 +530,7 @@ section#desktop-sidebar {
         aspect-ratio: 528 / 94;
         padding-left: 40px;
         color: white;
-        background: url(../Images/datapoint-title-brushed-background.png) 0/contain no-repeat
+        background: url(../Images/datapoint-title-brushed-background.png) 0/contain no-repeat;
     }
     
     #desktop-sidebar > div {

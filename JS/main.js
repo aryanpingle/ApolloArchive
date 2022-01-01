@@ -15,6 +15,20 @@ function setup_main() {
     set_mobile_nav_delays()
     set_mobile_links()
     setup_navigation_buttons()
+
+    if(window.navigator.onLine) {
+        document.getElementById("network-status").classList.remove("offline")
+    }
+    else
+    {
+        document.getElementById("network-status").classList.add("offline")
+    }
+    window.onoffline = () => {
+        document.getElementById("network-status").classList.add("offline")
+    }
+    window.ononline = () => {
+        document.getElementById("network-status").classList.remove("offline")
+    }
 }
 
 /**

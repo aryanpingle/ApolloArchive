@@ -17,7 +17,7 @@
 }
 
 * {
-    cursor: url(../Images/Cursor2.png), auto;
+    cursor: url(../Images/Cursor.png), auto;
     box-sizing: border-box;
 }
 
@@ -217,6 +217,7 @@ nav#desktop-nav {
     /* Desktop Navigation Bar */
 
     nav#desktop-nav {
+        position: relative;
         display: block;
         height: 15vh;
         width: 100%;
@@ -234,6 +235,54 @@ nav#desktop-nav {
         display: flex;
         justify-content: center;
         align-items: stretch;
+    }
+
+    /* Network Display */
+    
+    #network-status {
+        position: absolute;
+        margin-top: auto;
+        margin-bottom: auto;
+        left: 1em;
+        height: 40%;
+        aspect-ratio: 1 / 1;
+        background: url(../Images/offline.png) 0/contain no-repeat;
+        opacity: 0;
+        transition: opacity 250ms ease;
+        z-index: 1;
+    }
+
+    #network-status.offline {
+        opacity: 1;
+    }
+
+    #network-status::after {
+        user-select: none;
+        pointer-events: none;
+        z-index: 1;
+        content: "You're offline. Text datapoints will still be available.";
+        position: absolute;
+        margin-top: auto;
+        margin-bottom: auto;
+        top: 50%;
+        transition: all 250ms ease;
+        transform: translate(-100px, -50%);
+        left: 120%;
+        white-space: nowrap;
+        background-color: rgb(255, 64, 64);
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.5em;
+        padding: 0 10px;
+        border-radius: 10px;
+        opacity: 0;
+    }
+
+    #network-status.offline:hover::after {
+        opacity: 1;
+        transform: translate(0, -50%);
     }
 
     /* Navigation Buttons (Q & E) */
