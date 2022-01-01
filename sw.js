@@ -1,7 +1,7 @@
 // const log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
 const log = e=>e
 
-const VERSION = 2.30
+const VERSION = 2.4
 const CURRENT_CACHE = `v${VERSION.toFixed(2)}`
 
 self.addEventListener("install", event => {

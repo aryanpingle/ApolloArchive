@@ -68,7 +68,7 @@ function resize_handler_local() {
             nxt = nxt.nextElementSibling
         }
     }
-    logtime(stime, "resize_handler_local")
+    // logtime(stime, "resize_handler_local")
 }
 
 /**
@@ -122,10 +122,10 @@ function setup_datatype_links() {
             
             focus_datapoint(datapoints[0])
             
-            logtime(stime, "link_event")
+            // logtime(stime, "link_event")
         }
     }
-    logtime(stime, "setup_datatype_links")
+    // logtime(stime, "setup_datatype_links")
 }
 
 /**
@@ -145,7 +145,7 @@ function setup_close_buttons() {
             current_datatype = ""
         }
     }
-    logtime(stime, "setup_close_buttons")
+    // logtime(stime, "setup_close_buttons")
 }
 
 /**
@@ -186,7 +186,7 @@ function prepare_datapoints() {
             }
         }
     })
-    logtime(stime, "set_datapoint_events")
+    // logtime(stime, "set_datapoint_events")
 }
 
 /* AUDIO HANDLERS */
@@ -283,7 +283,7 @@ function init_popup() {
     // Just the popup element
     let play_button = POPUP.element.getElementsByClassName("play-button")[0]
     play_button.onclick = toggle_audio_playback
-    logtime(stime, "setup_datapoint_numbers")
+    // logtime(stime, "setup_datapoint_numbers")
 }
 
 function show_popup() {
@@ -441,7 +441,7 @@ function setup_key_presses() {
             print(key)
         }
     }
-    logtime(stime, "setup_key_presses")
+    // logtime(stime, "setup_key_presses")
 }
 
 function toggle_layout() {
