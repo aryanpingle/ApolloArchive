@@ -6,6 +6,9 @@ const logtime = (stime, process, color="greenyellow")=>print(`%c${process}%c com
 var mobile_mode = true;
 
 function setup_main() {
+    // Setup Service Worker
+    if("serviceworker" in navigator) navigator.serviceWorker.register("sw.js");
+
     if(window.innerWidth >= 1024) {
         mobile_mode = false;
     }

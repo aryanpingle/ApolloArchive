@@ -114,17 +114,11 @@ nav#mobile-nav > #nav-header {
     left: 0;
     height: 100%;
     width: 100%;
-    transition: opacity 250ms ease;
     aspect-ratio: 1 / 1;
-    opacity: 0;
 }
 
-#toggle-nav > img:first-child {
-    opacity: 1;
-}
-
-.nav-expanded #toggle-nav > img:nth-child(2) {
-    opacity: 1;
+.nav-expanded #toggle-nav > img {
+    filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
 }
 
 /* Mobile Nav Body - All Page Links */
