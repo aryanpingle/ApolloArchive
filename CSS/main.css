@@ -145,7 +145,7 @@ nav#mobile-nav > .nav-body {
     transition-delay: calc(var(--delay) - var(--base-delay) - 250ms);
 }
 
-.nav-body > .current {
+.nav__link--current {
     color: var(--selection-yellow);
 }
 
@@ -188,7 +188,7 @@ nav#mobile-nav > .nav-body {
 
 /* Hide the dekstop navigation bar */
 
-nav#desktop-nav {
+#desktop-nav {
     display: none;
 }
 
@@ -214,7 +214,7 @@ nav#desktop-nav {
 
     /* Desktop Navigation Bar */
 
-    nav#desktop-nav {
+    #desktop-nav {
         position: relative;
         display: block;
         height: 15vh;
@@ -229,7 +229,7 @@ nav#desktop-nav {
         color:var(--steel-blue);
     }
 
-    #desktop-nav > * {
+    .desktop-nav__child {
         display: flex;
         justify-content: center;
         align-items: stretch;
@@ -283,9 +283,9 @@ nav#desktop-nav {
         transform: translate(0, -50%);
     }
 
-    /* Navigation Buttons (Q & E) */
+    /* Page Navigation Buttons (Q & E) */
 
-    #navigate-left, #navigate-right {
+    #page-navigate-left, #page-navigate-right {
         background-color: rgba(255, 255, 255, 0.5);
         color: black;
         font-size: 0.5em;
@@ -295,31 +295,30 @@ nav#desktop-nav {
         transition: color 150ms ease;
     }
 
-    :is(#navigate-left, #navigate-right):hover {
-        color: rgb(255, 255, 160)
+    :is(#page-navigate-left, #page-navigate-right):hover {
+        color: rgb(255, 255, 160);
     }
 
     /* Actual Links */
 
     #desktop-nav > .nav-body {
-        /* background-color: blue; */
         gap: 1em;
         width: fit-content;
         justify-content: center;
         letter-spacing: 3px;
     }
 
-    #desktop-nav > .nav-body > * {
+    .nav-body.desktop-nav__child > .nav__link {
         opacity: 0.5;
         transition: color 150ms ease;
     }
 
-    #desktop-nav > .nav-body > .current {
-        opacity: 1;
+    .nav__link--current {
+        opacity: 1 !important;
         color: rgb(255, 255, 160);
     }
 
-    #desktop-nav > .nav-body > *:hover {
+    .nav-body.desktop-nav__child > .nav__link:hover {
         color: rgb(255, 255, 160);
     }
 

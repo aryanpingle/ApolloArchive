@@ -54,7 +54,7 @@ function toggle_nav() {
 }
 
 function set_mobile_nav_delays() {
-    let arr = document.querySelectorAll("#mobile-nav .nav-body > *")
+    let arr = document.querySelectorAll("#mobile-nav > .nav-body  > .nav__link")
     document.body.style = `--base-delay: ${250 / arr.length}ms`
     arr.forEach((ele, index)=>{
         // '250 + ...' is the time taken for the page to disappear
@@ -63,35 +63,25 @@ function set_mobile_nav_delays() {
 }
 
 function set_mobile_links() {
-    for(const ele of document.querySelectorAll(".nav-body > *")) {
+    for(const ele of document.querySelectorAll(".nav__link")) {
         if(ele.innerHTML.toLowerCase() == window.location.href.replace(".html", "").split(/[\W\.]/).pop().toLowerCase()) {
-            ele.classList.add("current")
+            ele.classList.add("nav__link--current")
         }
         print()
     }
 }
 
 function go_to_previous_page() {
-    let sib = document.querySelector("#desktop-nav .current").previousElementSibling
-    if (sib==null) {
-        document.querySelector("#desktop-nav .nav-body").lastElementChild.click()
-    }
-    else {
-        sib.click()
-    }
+    let sib = document.querySelector(".nav__link--current").previousElementSibling
+    sib ? sib.click() : document.querySelector(".nav-body.desktop-nav__child").lastElementChild.click()
 }
 
 function go_to_next_page() {
-    let sib = document.querySelector("#desktop-nav .current").nextElementSibling
-    if (sib==null) {
-        document.querySelector("#desktop-nav .nav-body").firstElementChild.click()
-    }
-    else {
-        sib.click()
-    }
+    let sib = document.querySelector(".nav__link--current").nextElementSibling
+    sib ? sib.click() : document.querySelector(".nav-body.desktop-nav__child").firstElementChild.click()
 }
 
 function setup_navigation_buttons() {
-    gid("navigate-left").onclick = go_to_previous_page
-    gid("navigate-right").onclick = go_to_next_page
+    document.querySelector("#page-navigate-left").onclick = go_to_previous_page
+    document.querySelector("#page-navigate-right").onclick = go_to_next_page
 }

@@ -186,6 +186,8 @@ function prepare_datapoints() {
 /* AUDIO HANDLERS */
 
 function toggle_audio_playback() {
+    if(!current_audio) return
+    
     if(current_audio.paused) {
         play_audio()
     }
