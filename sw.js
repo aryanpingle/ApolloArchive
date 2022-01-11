@@ -1,7 +1,7 @@
-// const log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
-const log = e=>e
+var log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
+log = e=>e
 
-const VERSION = 2.4
+const VERSION = 3.0
 const CURRENT_CACHE = `v${VERSION.toFixed(2)}`
 
 self.addEventListener("install", event => {
@@ -56,13 +56,14 @@ async function get_cache_request(request_event) {
         // It's not an audio file, so cache it first then send it
         return match.then(response => {
             let response_clone = response.clone()
-            caches.open(CURRENT_CACHE).then(cache => cache.put(request_event.request, response))
+            if(["Texts", "Images", "Fonts"].some(folder_name => request_event.request.url.includes(`${folder_name}/`))) {
+                caches.open(CURRENT_CACHE).then(cache => cache.put(request_event.request, response))
+            }
             return response_clone
         })
     })
 }
 
 async function get_network_request(request_event) {
-    console.log(request_event.request.url)
     return fetch(request_event.request)
 }

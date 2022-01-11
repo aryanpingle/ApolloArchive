@@ -135,7 +135,6 @@ nav#mobile-nav > .nav-body {
 }
 
 #mobile-nav .nav-body > * {
-    user-select: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,7 +165,6 @@ nav#mobile-nav > .nav-body {
     width: 100%;
     opacity: 1;
     padding: 10px 0;
-    background: linear-gradient(to bottom, transparent, rgba());
 
     transition: opacity 250ms ease;
     /* Delay while appearing */

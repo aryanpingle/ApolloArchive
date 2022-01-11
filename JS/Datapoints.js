@@ -1,12 +1,15 @@
+"use strict"
+
 const all_audios = {
-    "A": new Array(63),
-    "H": new Array(22)
+    "A": new Array(63).fill(null),
+    "H": new Array(22).fill(null)
 }
 var current_audio = null
 
 var focused_datapoint = null
 var selected_datapoint = null
 var datapoints = []
+var all_texts = null
 
 var current_datatype = ""
 
@@ -31,14 +34,14 @@ function setup_local() {
     
     // Set up the SIDEBAR constant
     SIDEBAR = {}
-    let [TITLE, DESCRIPTION, IMAGE] = gid("desktop-sidebar").children
+    let [TITLE, DESCRIPTION, IMAGE] = document.getElementById("desktop-sidebar").children
     SIDEBAR.title = TITLE
     SIDEBAR.description = DESCRIPTION
     SIDEBAR.image = IMAGE
     
     // Set up the POPUP constant
-    let POPUP_ELEMENT = gid("datapoint-popup")
-    let [header, dtype, audio, text] = gid("popup-info").children
+    let POPUP_ELEMENT = document.getElementById("datapoint-popup")
+    let [header, dtype, audio, text] = document.getElementById("popup-info").children
     POPUP = {
         element: POPUP_ELEMENT,
         header: header,
@@ -57,17 +60,6 @@ function setup_local() {
 
 function resize_handler_local() {
     let stime = new Date()
-    let arr = Array.from(document.getElementsByClassName("datapoint"))
-    let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
-    arr.forEach((ele, index)=>ele.style.setProperty('--datapoint-text-size', heights[index]))
-    if(selected_datapoint) {
-        let offsetHeight = getComputedStyle(selected_datapoint).getPropertyValue("--datapoint-text-size")
-        let nxt = selected_datapoint.nextElementSibling
-        while(nxt) {
-            nxt.style.setProperty("--shift", offsetHeight)
-            nxt = nxt.nextElementSibling
-        }
-    }
     // logtime(stime, "resize_handler_local")
 }
 
@@ -81,12 +73,13 @@ function is_classic_layout() {
 
 /**
 * Adds onclick events to all div.datapoint-choice elements such that when they're clicked, the correct datatype section pops up
+* NEW: Loads the relevant Texts/[target].json file
 * If classic layout is enabled, then the first element of that section is given the 'focused' class
 */
 
 function setup_datatype_links() {
     let stime = new Date()
-    for(const datatype_choice of gid("datapoint-types-inner").children) {
+    for(const datatype_choice of document.getElementById("datapoint-types-inner").children) {
         datatype_choice.onclick = event=>{
             event.stopPropagation()
             let stime = new Date()
@@ -96,9 +89,8 @@ function setup_datatype_links() {
             // If it is another choice, de-select it and hide its corresponding section
             if(current_datatype) {
                 current_datatype_choice.classList.remove("datatype-selected")
-                gid(current_datatype).classList.remove("shown")
-                // EXTRA: Stop the currently playing audio and de-select the selected datapoint
-                stop_audio()
+                document.getElementById(current_datatype).classList.remove("shown")
+                pause_audio()
                 if(selected_datapoint) {
                     selected_datapoint.classList.remove("selected")
                     selected_datapoint = null
@@ -106,19 +98,22 @@ function setup_datatype_links() {
             }
             
             datatype_choice.classList.add("datatype-selected")
-            current_datatype = datatype_choice.getAttribute("target");
+            current_datatype = datatype_choice.getAttribute("target")
+            fetch(`Texts/${current_datatype}.json`).then(data => data.json()).then(data => all_texts = data)
+            // If it's an audio or hologram datapoint, load all the audios
+            if(["Audio", "Hologram"].includes(current_datatype)) load_all_audios()
             // Update the poster
-            [...document.getElementsByClassName("datatype-poster")].forEach(ele=>{
+            Array.from(document.getElementsByClassName("datatype-poster")).forEach(ele=>{
                 ele.src = `Images/${current_datatype.startsWith("Text")?"text":current_datatype.toLowerCase()}-poster.png`
             })
             // Show the container for the datatype
-            gid("datatype-container").classList.add("shown")
+            document.getElementById("datatype-container").classList.add("shown")
             // Show the section with all the datapoints
-            gid(current_datatype).classList.add("shown")
+            document.getElementById(current_datatype).classList.add("shown")
             // Hide the datatype-choser section (this too is for mobile only)
-            gid("datapoint-types").classList.remove("shown")
+            document.getElementById("datapoint-types").classList.remove("shown")
             // Update the datapoints array
-            datapoints = gid(current_datatype).getElementsByClassName("datapoint-container")[0].children
+            datapoints = document.getElementById(current_datatype).getElementsByClassName("datapoint-container")[0].children
             
             focus_datapoint(datapoints[0])
             
@@ -138,10 +133,10 @@ function setup_close_buttons() {
         ele.onclick = event=>{
             let datatype_section = ele.parentElement.parentElement
             datatype_section.classList.remove("shown")
-            gid("datatype-container").classList.remove("shown")
-            gid("datapoint-types").classList.add("shown")
-            // Stop playing audio, if at all
-            stop_audio()
+            document.getElementById("datatype-container").classList.remove("shown")
+            document.getElementById("datapoint-types").classList.add("shown")
+            // Pause the playing audio, if at all
+            pause_audio()
             current_datatype = ""
         }
     }
@@ -177,11 +172,10 @@ function prepare_datapoints() {
             if(event.target.matches(".play-button")) {
                 toggle_audio_playback()
             }
-            else if(event.target.matches(".datapoint-title, .datapoint-title > header")) {
-                event.stopPropagation()
-                select_datapoint()
+            else if(event.target.matches(".progress-bar")) {
+                current_audio.currentTime = current_audio.duration * event.offsetX / event.srcElement.clientWidth
             }
-            else {
+            else if(event.target.matches(".datapoint, .datapoint-title, .datapoint-title > header")) {
                 select_datapoint()
             }
         }
@@ -200,11 +194,27 @@ function toggle_audio_playback() {
     }
 }
 
+function getTimeStamp(time) {
+    let played = parseInt(time)
+    let zeros = (n, dig) => Array(`${10**(dig-1)}`.length - `${n?n:0}`.length).fill(0).join("") + "" + n
+    return `${parseInt(played / 60)}:${zeros(played % 60, 2)}`
+}
+
 function update_progress_bar() {
-    if(selected_datapoint && current_audio) {
-        let perc = 100 * current_audio.currentTime / current_audio.duration
-        selected_datapoint.getElementsByClassName("progress-bar")[0].style.setProperty("--perc", perc)
-        POPUP.audio.lastElementChild.style.setProperty("--perc", perc)
+    if(!selected_datapoint || !current_audio) return
+    
+    // Update the progress bar
+    let perc = 100 * current_audio.currentTime / current_audio.duration
+    selected_datapoint.getElementsByClassName("progress-bar")[0].style.setProperty("--perc", perc)
+    POPUP.audio.children[1].style.setProperty("--perc", perc)
+    // Update the played / length text
+    if(current_audio) {
+        let current_timestamp = getTimeStamp(current_audio.currentTime)
+        let duration_timestamp = getTimeStamp(current_audio.duration)
+        // Apply to the default datapoint audio element
+        selected_datapoint.querySelector(".ratio").textContent = `${current_timestamp} / ${duration_timestamp}`
+        // Apply to the popup datapoint audio element
+        POPUP.audio.querySelector(".ratio").textContent = `${current_timestamp} / ${duration_timestamp}`
     }
 }
 
@@ -242,12 +252,40 @@ function stop_audio() {
     if(current_audio) {
         pause_audio()
         current_audio.currentTime = 0
-        POPUP.audio.lastElementChild.style="--perc:0"
+    }
+}
+
+function load_all_audios() {
+    let media_type = current_datatype[0]
+    let audios = all_audios[media_type]
+    
+    if(audios[0] != null) {
+        // All audios of this datatype have been loaded
+        return
+    }
+    
+    for(let i = 0; i < audios.length; ++i) {
+        let audio = document.createElement("AUDIO")
+        audio.preload = "metadata"
+        audio.onloadedmetadata = event => {            
+            let duration_timestamp = getTimeStamp(audio.duration)
+            // Get the relevant datapoint
+            let datapoint = document.getElementById(current_datatype).querySelector(".datapoint-container").children[i]
+            // Set the datapoint audio duration
+            datapoint.querySelector(".ratio").textContent = `0:00 / ${duration_timestamp}`
+            // Let CSS know that the metadata has been loaded
+            datapoint.classList.add("datapoint--loaded-metadata")
+        }
+        audio.src = `Audio/HZD ${media_type} ${i + 1}.mp3`
+        audio.ontimeupdate = update_progress_bar
+        audio.onended = stop_audio
+        audios[i] = audio
     }
 }
 
 /**
-* Loads the audio associated with the selected_datapoint
+* Sets current_audio to the audio associated with the datapoint
+* If the datapoint is not a media type, sets current_audio to null
 */
 
 function load_audio() {
@@ -256,63 +294,75 @@ function load_audio() {
         current_audio = null
         return null
     }
-    let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
     
-    if(all_audios[media_type][datapoint_position-1]) {
-        // If the audio is already loaded:
-        current_audio = all_audios[media_type][datapoint_position-1]
-        return current_audio
-    }
-    // Since the audio hasn't been loaded yet, load it now
-    let audio = new Audio(`../Audio/HZD ${media_type} ${datapoint_position}.mp3`)
-    audio.ontimeupdate = update_progress_bar
-    audio.onended = stop_audio
-    all_audios[media_type][datapoint_position-1] = audio
-    current_audio = audio
-    return all_audios[media_type][datapoint_position-1]
+    let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
+    current_audio = all_audios[media_type][datapoint_position-1]
+    return current_audio
 }
 
 /* POPUP HANDLERS */
 
 /**
- * Initializes the popup format
+* Initializes the popup format
 */
 
 function init_popup() {
     let stime = new Date()
     // Just the popup element
-    let play_button = POPUP.element.getElementsByClassName("play-button")[0]
+    let play_button = POPUP.element.querySelector(".play-button")
     play_button.onclick = toggle_audio_playback
+    play_button.nextElementSibling.onclick = event => {
+        current_audio.currentTime = current_audio.duration * event.offsetX / event.srcElement.clientWidth
+    }
     // logtime(stime, "setup_datapoint_numbers")
+}
+
+/**
+* Intialize the popup with the selected datapoint's attributes 
+*/
+
+function update_popup() {
+    // Set the datapoint title
+    POPUP.header.textContent = selected_datapoint.firstElementChild.firstElementChild.innerText
+    // Set the datatype
+    POPUP.dtype.innerHTML = current_datatype
+    
+    let media_type = selected_datapoint.getAttribute("media-type")
+    
+    // Set the popup text
+    POPUP.text.querySelector("text").innerHTML = all_texts[parseInt(selected_datapoint.getAttribute("position")) - 1]
+    
+    if(media_type) {
+        // Reset progress bar
+        POPUP.audio.children[1].style.setProperty("--perc", 100 * current_audio.currentTime / current_audio.duration)
+        
+        // Set ratio
+        let current_timestamp = getTimeStamp(current_audio.currentTime)
+        let duration_timestamp = getTimeStamp(current_audio.duration)
+        POPUP.audio.querySelector(".ratio").textContent = `${current_timestamp} / ${duration_timestamp}`
+        
+        // Set media type attribute
+        document.getElementById("popup-content").setAttribute("media-type", media_type)
+        document.getElementById("popup-main").setAttribute("media-type", media_type)
+    }
+    else {
+        // Remove media type attribute
+        document.getElementById("popup-content").removeAttribute("media-type")
+        document.getElementById("popup-main").removeAttribute("media-type")
+    }
+    
+    show_popup()
 }
 
 function show_popup() {
     POPUP_MODE = true
-    // Due to the layout of datapoints and my shit naming system, #popup-content acts like the datapoint div, so add the media-type to it
-    let mt = selected_datapoint.getAttribute("media-type")
-    if(mt) {
-        gid("popup-content").setAttribute("media-type", mt)
-        gid("popup-main").setAttribute("media-type", mt)
-    }
-    else {
-        gid("popup-content").removeAttribute("media-type")
-        gid("popup-main").removeAttribute("media-type")
-    }
-    // Set the header
-    POPUP.header.innerHTML = selected_datapoint.firstElementChild.firstElementChild.innerHTML
-    // Set the datatype
-    POPUP.dtype.innerHTML = current_datatype
-    // Set the text
-    POPUP.text.innerHTML = selected_datapoint.lastElementChild.lastElementChild.innerHTML
-    
     POPUP.element.classList.add("shown")
 }
 
 function close_popup() {
     POPUP_MODE = false
     // Pause if playing
-    stop_audio()
-    select_datapoint()
+    pause_audio()
     POPUP.element.classList.remove("shown")
 }
 
@@ -333,32 +383,42 @@ function select_datapoint() {
     if(selected_datapoint == focused_datapoint) {
         // De-select currently focused datapoint
         selected_datapoint.classList.remove("selected")
-        // Remove the offset
-        let nxt = selected_datapoint.nextElementSibling
-        while(nxt) {
-            nxt.style.setProperty("--shift", "0")
-            nxt = nxt.nextElementSibling
-        }
+        // Now that the datapoint has display: none, changes to its children won't cause reflow
         stop_audio()
+        close_popup()
         selected_datapoint = null
         return
     }
+    // So now, we know it's a new datapoint that's been selected
     if(selected_datapoint) {
         // De-select currently focused datapoint
         selected_datapoint.classList.remove("selected")
-        stop_audio()
+        // Now that the datapoint has display: none, changes to its children won't cause reflow
+        pause_audio()
     }
-    // Select the currently focused datapoint
-    focused_datapoint.classList.add("selected")
+    
+    // First of all, select the currently focused datapoint
     selected_datapoint = focused_datapoint
-    let offsetHeight = getComputedStyle(selected_datapoint).getPropertyValue("--datapoint-text-size")
-    let nxt = selected_datapoint.nextElementSibling
-    while(nxt) {
-        nxt.style.setProperty("--shift", offsetHeight)
-        nxt = nxt.nextElementSibling
+    let media_type = selected_datapoint.getAttribute("media-type")
+    
+    // Set current_audio
+    if(!media_type) {
+        current_audio = null
     }
-    load_audio()
-    show_popup()
+    else {
+        let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
+        current_audio = all_audios[media_type][datapoint_position-1]
+    }
+    // If the text hasn't been set, do it now
+    if(!selected_datapoint.querySelector("text").textContent) {
+        selected_datapoint.querySelector("text").innerHTML = all_texts[parseInt(selected_datapoint.getAttribute("position")) - 1]
+    }
+    
+    update_popup()
+    
+    // After selecting the datapoint, changes to the datapoint will cause reflow
+    selected_datapoint.classList.add("selected")
+    selected_datapoint.scrollIntoView()
 }
 
 // Overrides the main.js setup_key_presses()
@@ -399,7 +459,7 @@ function setup_key_presses() {
         else if(is_classic_layout()) {
             if(!["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"].includes(key)) return
             // Since this is a classic layout, we need to traverse the grid
-            let columns = parseInt(getComputedStyle(gid(current_datatype).querySelector(".datapoint-container")).getPropertyValue("--columns"))
+            let columns = parseInt(getComputedStyle(document.getElementById(current_datatype).querySelector(".datapoint-container")).getPropertyValue("--columns"))
             let new_index = 0
             let position = parseInt(focused_datapoint.getAttribute("position"))
             if(key == "w" || key == "ArrowUp") {

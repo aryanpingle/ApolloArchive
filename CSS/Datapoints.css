@@ -67,14 +67,13 @@ section#datapoint-types {
 
 @media (min-width: 1024px) {
     section#datapoint-types {
-        /* background-color: aqua; */
-        
         flex: 8 0 0;
         justify-content: start;
     }
 }
 
 #datapoint-types-inner {
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -272,7 +271,6 @@ section.datatype.shown {
     
     display: flex;
     justify-content: center;
-    /* align-items: center; */
     
     overflow: auto;
 }
@@ -291,6 +289,7 @@ section.datatype.shown {
 .datapoint-container {
     --shift: 0;
     --columns: 1;
+    margin: auto;
     height: fit-content;
     width: calc(100% - 20px);
     
@@ -298,35 +297,37 @@ section.datatype.shown {
     grid-template-columns: repeat(1, 100%);
 }
 
+@media (min-width: 1024px) {
+    .datapoint-container {
+        margin: 0;
+    }
+}
+
 /* Finally, datapoints themselves */
 
 .datapoint {
-    /* --shift: 0; */
-    transition: transform 250ms ease;
     width: 100%;
     user-select: none;
+    overflow: hidden;
     counter-increment: datapoint-number;
     --datapoint-audio-height: 0em;
 }
 
-.selected ~ .datapoint {
-    /* Don't ask me why 3em instead of 5em, it just works */
-    transform: translateY(calc(10px + (var(--shift) * 1px)));
+.datapoint[media-type] {
+    opacity: 0.5;
+    pointer-events: none;
+    --datapoint-audio-height: 5em;
 }
 
-.selected ~ .datapoint[media-type] {
-    /* Don't ask me why 3em instead of 5em, it just works */
-    transform: translateY(calc(10px + 3em + (var(--shift) * 1px)));
+.datapoint.datapoint--loaded-metadata {
+    pointer-events: all;
+    opacity: 1;
 }
 
 @media (min-width: 1024px) {
     .classic-layout .datapoint {
         transform: none !important;
     }
-}
-
-.datapoint[media-type] {
-    --datapoint-audio-height: 5em;
 }
 
 .datapoint-title {
@@ -383,15 +384,16 @@ section.datatype.shown {
 .datapoint-content {
     font-family: 'Inconsolata', monospace;
     font-size: 18px;
-    height: 0;
     opacity: 0;
-    /* overflow: hidden; */
-    transition: opacity 250ms ease;
-    pointer-events: none;
+    display: none;
+    transition: opacity, transform 250ms ease;
+    transform: translateY(-100%);
 }
 
 .selected > .datapoint-content {
-    pointer-events: all;
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
 }
 
 @media (min-width: 1024px) {
@@ -410,7 +412,8 @@ section.datatype.shown {
     height: var(--datapoint-audio-height);
     margin: 0 auto;
     padding: 1em 0;
-    width: 250px;
+    width: 90%;
+    max-width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -475,6 +478,15 @@ section.datatype.shown {
     transition: width 200ms linear;
     height: 100%;
     background-color: white;
+}
+
+.datapoint-audio > .ratio {
+    white-space: nowrap;
+    color: var(--steel-blue);
+}
+
+.ratio:empty::before {
+    content: "Loading...";
 }
 
 .datapoint-text {
@@ -565,11 +577,21 @@ section#desktop-sidebar {
         
         position: relative;
         aspect-ratio: 1 / 1;
+    }
+
+    .classic-layout .datapoint::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         
-        background: url(../Images/DatapointBackground-Transparent.png) center/cover no-repeat;
+        background: url(../Images/DatapointBackground-Transparent.png) 0/cover;
+        opacity: 0.65;
     }
     
-    .classic-layout .datapoint::before {
+    .classic-layout .datapoint::after {
         content: '';
         position: absolute;
         top: 0;
@@ -580,12 +602,12 @@ section#desktop-sidebar {
         background: center/cover no-repeat;
     }
 
-    .classic-layout #Audio .datapoint::before {background-image: url(../Images/datapoint-icon-audio.png);}
-    .classic-layout #Hologram .datapoint::before {background-image: url(../Images/datapoint-icon-hologram.png);}
-    .classic-layout :is(#Text-Quest, #Text-World, #Text-Machines) .datapoint::before {background-image: url(../Images/datapoint-icon-text.png);}
-    .classic-layout #Scanned-Glyphs .datapoint::before {background-image: url(../Images/datapoint-icon-scanned-glyphs.png);}
+    .classic-layout #Audio .datapoint::after {background-image: url(../Images/datapoint-icon-audio.png);}
+    .classic-layout #Hologram .datapoint::after {background-image: url(../Images/datapoint-icon-hologram.png);}
+    .classic-layout :is(#Text-Quest, #Text-World, #Text-Machines) .datapoint::after {background-image: url(../Images/datapoint-icon-text.png);}
+    .classic-layout #Scanned-Glyphs .datapoint::after {background-image: url(../Images/datapoint-icon-scanned-glyphs.png);}
 
-    .classic-layout .datapoint.focused::before {
+    .classic-layout .datapoint.focused::after {
         filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
     }
     
@@ -648,7 +670,7 @@ section#desktop-sidebar {
         font-size: 3em;
         aspect-ratio: 528 / 94;
         color: white;
-        background: url(../Images/cum2.png) 0/contain no-repeat;
+        background: url(../Images/datapoint-title-brushed-background.png) 0/contain no-repeat;
         text-align: center;
         padding: 0;
     }
@@ -720,6 +742,7 @@ section#desktop-sidebar {
 
 @media (max-width: 1550px) and (min-width: 1024px) {
     #datapoint-types-inner > .datapoint-choice {
+        user-select: none;
         /* Fancy calculation: 0.75em at 1024px, 1em at 1550px */
         font-size: calc(0.75em + 8 * (100vw - 1024px) / 526);
     }
