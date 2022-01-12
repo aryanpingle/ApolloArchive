@@ -1,3 +1,10 @@
+///////////////////////////////////
+//   The best service worker on  //
+//          the planet.          //
+//                               //
+//       Suck it WorkboxJS.      //
+///////////////////////////////////
+
 // Document Cache is a cache of document files - html, js, css, etc
 const DOCUMENT_VERSION = 3.20
 const DOCUMENT_CACHE_NAME = `DOCv${DOCUMENT_VERSION.toFixed(2)}`
@@ -14,8 +21,8 @@ String.prototype.containsAny = function (substrings=[]) {
 
 // For Debugging
 STOP_CACHING = false
-var log = (text, color = "white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
-// log = e => e
+var log = (text, color="white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
+log = e => e
 
 self.addEventListener("install", event => {
     event.waitUntil(self.skipWaiting())
@@ -110,7 +117,7 @@ async function get_request(request_event) {
     else if(url.containsAny([".json", "Fonts/", "Images/", "fonts.googleapis.com"])) {
         // Perform a cache request
         let match = await RESOURCE_CACHE.match(request, { ignoreVary: true })
-        if (match != undefined) return match
+        if (match != undefined && match != null) return match
         // Perform a network request
         match = await fetch(request)
         RESOURCE_CACHE.put(request, match.clone())
