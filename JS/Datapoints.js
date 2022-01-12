@@ -4,6 +4,7 @@ const all_audios = {
     "A": new Array(63).fill(null),
     "H": new Array(22).fill(null)
 }
+var audio_durations = {"A":[20,20,32,24,33,32,44,8,39,46,52,19,31,37,20,23,51,58,45,54,25,20,32,46,66,23,118,81,72,46,68,43,55,50,85,59,65,70,61,65,61,91,66,76,71,76,97,16,25,77,91,66,97,17,14,22,25,63,85,69,81,62,52],"H":[24,10,45,52,44,55,59,74,85,163,244,60,55,70,45,25,41,35,84,218,143,106]}
 var current_audio = null
 
 var focused_datapoint = null
@@ -30,31 +31,11 @@ var POPUP = {
 }
 
 function setup_local() {
-    print("Starting local setup")
-    
-    // Set up the SIDEBAR constant
-    SIDEBAR = {}
-    let [TITLE, DESCRIPTION, IMAGE] = document.getElementById("desktop-sidebar").children
-    SIDEBAR.title = TITLE
-    SIDEBAR.description = DESCRIPTION
-    SIDEBAR.image = IMAGE
-    
-    // Set up the POPUP constant
-    let POPUP_ELEMENT = document.getElementById("datapoint-popup")
-    let [header, dtype, audio, text] = document.getElementById("popup-info").children
-    POPUP = {
-        element: POPUP_ELEMENT,
-        header: header,
-        dtype: dtype,
-        audio: audio,
-        text: text
-    }
-    
+    init_popup()
     setup_datatype_links()
     setup_close_buttons()
     prepare_datapoints()
     setup_key_presses()
-    init_popup()
     document.body.classList.add("classic-layout")
 }
 
@@ -79,7 +60,7 @@ function is_classic_layout() {
 
 function setup_datatype_links() {
     let stime = new Date()
-    for(const datatype_choice of document.getElementById("datapoint-types-inner").children) {
+    for(const datatype_choice of document.querySelector("#datapoint-types-inner").children) {
         datatype_choice.onclick = event=>{
             event.stopPropagation()
             let stime = new Date()
@@ -145,7 +126,7 @@ function setup_close_buttons() {
 
 /**
 * Multipurpose function
-* 1. Sets onclick events to datapoint titles such that in list mode when clicked, select_element() is called on that datapoint. Actually, you don't need to check for list mode here, since titles are shown ONLY in list mode anyway.
+* 1. Sets the audio duration
 * 2. Sets onmouseover events to datapoints such that when hovered, focus_element() is called on that datapoint
 * 3. Sets onclick events to datapoints such that in classic mode when clicked, select_element() is called on that datapoint
 * 
@@ -154,31 +135,31 @@ function setup_close_buttons() {
 
 function prepare_datapoints() {
     let stime = new Date()
-    let arr = Array.from(document.getElementsByClassName("datapoint"))
-    // Temporary array to store all computed heights of the datapoints, so that reflow occurs only during the initial read (i.e. once)
-    let heights = arr.map(ele=>ele.getElementsByTagName("text")[0].offsetHeight)
-    arr.forEach((datapoint, index)=>{
-        datapoint.setAttribute("position", [...datapoint.parentElement.children].indexOf(datapoint)+1)
-        
-        datapoint.style.setProperty('--datapoint-text-size', heights[index])
-        
-        // 2. Set onmouseover event for datapoints
-        datapoint.onmouseover = event=>{
-            focus_datapoint(datapoint)
-        }
-        
-        // 3. Set onclick event for datapoints
-        datapoint.onclick = event=>{
-            if(event.target.matches(".play-button")) {
-                toggle_audio_playback()
+    Array.from(document.querySelectorAll(".datapoint-container")).forEach(datapoint_container => {
+        Array.from(datapoint_container.querySelectorAll(".datapoint")).forEach((datapoint, index)=>{
+            datapoint.setAttribute("position", index+1)
+    
+            // 1. Set the audio duration
+            if(datapoint.getAttribute("media-type")) datapoint.querySelector(".ratio").textContent = `0:00 / ${getTimeStamp(audio_durations[datapoint.getAttribute("media-type")][index])}`
+            
+            // 2. Set onmouseover event for datapoints
+            datapoint.onmouseover = event=>{
+                focus_datapoint(datapoint)
             }
-            else if(event.target.matches(".progress-bar")) {
-                current_audio.currentTime = current_audio.duration * event.offsetX / event.srcElement.clientWidth
+            
+            // 3. Set onclick event for datapoints
+            datapoint.onclick = event=>{
+                if(event.target.matches(".play-button")) {
+                    toggle_audio_playback()
+                }
+                else if(event.target.matches(".progress-bar")) {
+                    current_audio.currentTime = current_audio.duration * event.offsetX / event.srcElement.clientWidth
+                }
+                else if(event.target.matches(".datapoint, .datapoint-title, .datapoint-title > header")) {
+                    select_datapoint()
+                }
             }
-            else if(event.target.matches(".datapoint, .datapoint-title, .datapoint-title > header")) {
-                select_datapoint()
-            }
-        }
+        })
     })
     // logtime(stime, "set_datapoint_events")
 }
@@ -187,7 +168,7 @@ function prepare_datapoints() {
 
 function toggle_audio_playback() {
     if(!current_audio) return
-    
+
     if(current_audio.paused) {
         play_audio()
     }
@@ -268,16 +249,7 @@ function load_all_audios() {
     
     for(let i = 0; i < audios.length; ++i) {
         let audio = document.createElement("AUDIO")
-        audio.preload = "metadata"
-        audio.onloadedmetadata = event => {            
-            let duration_timestamp = getTimeStamp(audio.duration)
-            // Get the relevant datapoint
-            let datapoint = document.getElementById(current_datatype).querySelector(".datapoint-container").children[i]
-            // Set the datapoint audio duration
-            datapoint.querySelector(".ratio").textContent = `0:00 / ${duration_timestamp}`
-            // Let CSS know that the metadata has been loaded
-            datapoint.classList.add("datapoint--loaded-metadata")
-        }
+        // audio.preload = "metadata"
         audio.src = `Audio/HZD ${media_type} ${i + 1}.mp3`
         audio.ontimeupdate = update_progress_bar
         audio.onended = stop_audio
@@ -310,6 +282,24 @@ function load_audio() {
 
 function init_popup() {
     let stime = new Date()
+
+    // Set up the SIDEBAR constant
+    SIDEBAR = {}
+    let [TITLE, DESCRIPTION, IMAGE] = document.getElementById("desktop-sidebar").children
+    SIDEBAR.title = TITLE
+    SIDEBAR.description = DESCRIPTION
+    SIDEBAR.image = IMAGE
+    
+    // Set up the POPUP constant
+    let POPUP_ELEMENT = document.getElementById("datapoint-popup")
+    let [header, dtype, audio, text] = document.getElementById("popup-info").children
+    POPUP = {
+        element: POPUP_ELEMENT,
+        header: header,
+        dtype: dtype,
+        audio: audio,
+        text: text
+    }
     // Just the popup element
     let play_button = POPUP.element.querySelector(".play-button")
     play_button.onclick = toggle_audio_playback
@@ -432,7 +422,7 @@ function setup_key_presses() {
         
         // If popup is enabled
         if(POPUP_MODE && is_classic_layout()) {
-            if(key == "f") {
+            if(key == "f" || key == "Enter") {
                 toggle_audio_playback(POPUP.audio.firstElementChild)
             }
             else if(key == "Escape") {
@@ -444,7 +434,7 @@ function setup_key_presses() {
             return
         }
         // POPUP is definitely not enabled
-        if (key == "q") {
+        else if (key == "q") {
             go_to_previous_page()
         }
         else if (key=="e") {
@@ -455,7 +445,7 @@ function setup_key_presses() {
             
             toggle_layout()
         }
-        else if(key == "f") {
+        else if(key == "f" || key == "Enter") {
             select_datapoint()
         }
         else if(is_classic_layout()) {
@@ -499,7 +489,6 @@ function setup_key_presses() {
             }
         }
         else {
-            print("koi")
             print(key)
         }
     }

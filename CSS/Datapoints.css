@@ -148,10 +148,6 @@ section#datapoint-types {
 
 /* Container for each section of datapoints */
 
-section#datatype-container {
-    /* Something */
-}
-
 @media (min-width: 1024px) {
     section#datatype-container {
         pointer-events: none;
@@ -314,14 +310,7 @@ section.datatype.shown {
 }
 
 .datapoint[media-type] {
-    opacity: 0.5;
-    pointer-events: none;
     --datapoint-audio-height: 5em;
-}
-
-.datapoint.datapoint--loaded-metadata {
-    pointer-events: all;
-    opacity: 1;
 }
 
 @media (min-width: 1024px) {
@@ -413,7 +402,7 @@ section.datatype.shown {
     margin: 0 auto;
     padding: 1em 0;
     width: 90%;
-    max-width: 300px;
+    max-width: 750px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -423,7 +412,7 @@ section.datatype.shown {
 @media (min-width: 1024px) {
     .datapoint-content > .datapoint-audio {
         margin: 0;
-        width: 500px;
+        width: 100%;
     }
 }
 
