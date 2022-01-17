@@ -133,6 +133,7 @@ nav#mobile-nav > .nav-body {
 }
 
 .nav-expanded #mobile-nav .nav-body > .nav__link {
+    user-select: none;
     opacity: 1;
     /* Delay while appearing */
     transition-delay: var(--delay);
