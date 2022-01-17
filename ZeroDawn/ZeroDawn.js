@@ -123,7 +123,6 @@ function setup_datatype_links() {
             if(current_datatype && current_datatype_choice == datatype_choice) return
             // If it is another choice, de-select it and hide its corresponding section
             if(current_datatype) {
-                print(current_datatype_choice)
                 current_datatype_choice.classList.remove("datatype-selected")
                 document.getElementById(current_datatype).classList.remove("shown")
                 pause_audio()
@@ -170,6 +169,8 @@ function setup_close_buttons() {
             datatype_section.classList.remove("shown")
             document.getElementById("datatype-container").classList.remove("shown")
             document.getElementById("datapoint-types").classList.add("shown")
+            document.getElementById("datapoint-types").querySelector(".datatype-selected").classList.remove("datatype-selected")
+            current_datatype = null
             // Pause the playing audio, if at all
             pause_audio()
         }

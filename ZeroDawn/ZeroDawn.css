@@ -133,7 +133,6 @@ nav#mobile-nav > .nav-body {
 }
 
 .nav-expanded #mobile-nav .nav-body > .nav__link {
-    user-select: none;
     opacity: 1;
     /* Delay while appearing */
     transition-delay: var(--delay);
@@ -468,6 +467,7 @@ section#datapoint-types {
 }
 
 #datapoint-types-inner > .datapoint-choice {
+    user-select: none;
     position: relative;
     width: 100%;
     display: flex;
@@ -479,7 +479,6 @@ section#datapoint-types {
 @media (min-width: 1024px) {
     .datapoint-choice {
         color: var(--steel-blue);
-        user-select: none;
         height: fit-content;
     }
     
