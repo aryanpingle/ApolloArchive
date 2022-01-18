@@ -3,10 +3,15 @@
 :root {
     --steel-blue: hsl(180, 13%, 62%);
     --selection-yellow: rgb(255, 255, 160);
+    --selection-blue: rgb(117, 223, 255);
+    --selection-color: var(--selection-yellow);
+    --filter-yellow-from-white: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
+    --filter-blue-from-white: brightness(0) saturate(100%) invert(78%) sepia(49%) saturate(684%) hue-rotate(164deg) brightness(100%) contrast(103%);
+    --selection-filter: var(--filter-yellow-from-white);
 }
 
 ::selection {
-    background-color: var(--selection-yellow);
+    background-color: var(--selection-color);
     color: black;
 }
 
@@ -82,7 +87,7 @@ nav#mobile-nav > #nav-header {
 }
 
 .nav-expanded #toggle-nav > img {
-    filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
+    filter: var(--selection-filter);
 }
 
 /* Mobile Nav Body - All Page Links */
@@ -276,7 +281,7 @@ nav#mobile-nav > .nav-body {
     }
 
     :is(#page-navigate-left, #page-navigate-right):hover {
-        color: rgb(255, 255, 160);
+        color: var(--selection-color);
     }
 
     /* Actual Links */
@@ -342,7 +347,7 @@ nav#mobile-nav > .nav-body {
     }
 
     .controls-container > *:hover {
-        color: rgb(255, 255, 160)
+        color: var(--selection-color);
     }
 
     .controls-container .control-key {
@@ -489,15 +494,15 @@ section#datapoint-types {
     }
     
     .datapoint-choice:hover {
-        color: var(--selection-yellow);
+        color: var(--selection-color);
     }
     
     .datapoint-choice.datatype-selected {
-        color: var(--selection-yellow);
+        color: var(--selection-color);
     }
     
     .datatype-selected > img {
-        filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
+        filter: var(--selection-filter);
     }
 }
 
@@ -729,7 +734,7 @@ section.datatype.shown {
 
 @media (min-width: 1024px) {
     .datapoint.focused > .datapoint-title > header {
-        color: var(--selection-yellow);
+        color: var(--selection-color);
     }
     
     .datapoint-title::before {
@@ -742,7 +747,7 @@ section.datatype.shown {
 }
 
 .datapoint.selected > .datapoint-title > header {
-    color: var(--selection-yellow);
+    color: var(--selection-color);
 }
 
 .datapoint-content {
@@ -972,7 +977,7 @@ section#desktop-sidebar {
     .classic-layout #Scanned-Glyphs .datapoint::after {background-image: url(/zero-dawn/images/datapoint-icon-scanned-glyphs.png);}
 
     .classic-layout .datapoint.focused::after {
-        filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
+        filter: var(--selection-filter);
     }
     
     .classic-layout .datapoint > * {
