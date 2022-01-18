@@ -91,7 +91,7 @@ async function get_request(request_event) {
         else {
             // A cached version DOES exist
             log("A cached version DOES exist", "rgb(128, 128, 255)")
-            const SECONDS_TO_TIMEOUT = 4
+            const SECONDS_TO_TIMEOUT = 1
             
             const abort_controller = new AbortController()
             const abort_signal = abort_controller.signal
