@@ -1,10 +1,16 @@
 "use strict"
 
 const all_audios = {
-    "A": new Array(63).fill(null),
-    "H": new Array(22).fill(null)
+    "/ZeroDawn": {
+        "A": new Array(63).fill(null),
+        "H": new Array(22).fill(null)
+    },
+    "/ZeroDawn/TheFrozenWilds": {
+        "A": new Array(25).fill(null),
+        "H": new Array(3).fill(null)
+    }
 }
-var audio_durations = {"A":[20,20,32,24,33,32,44,8,39,46,52,19,31,37,20,23,51,58,45,54,25,20,32,46,66,23,118,81,72,46,68,43,55,50,85,59,65,70,61,65,61,91,66,76,71,76,97,16,25,77,91,66,97,17,14,22,25,63,85,69,81,62,52],"H":[24,10,45,52,44,55,59,74,85,163,244,60,55,70,45,25,41,35,84,218,143,106]}
+var audio_durations = {"/ZeroDawn": {"A":[20,20,32,24,33,32,44,8,39,46,52,19,31,37,20,23,51,58,45,54,25,20,32,46,66,23,118,81,72,46,68,43,55,50,85,59,65,70,61,65,61,91,66,76,71,76,97,16,25,77,91,66,97,17,14,22,25,63,85,69,81,62,52],"H":[24,10,45,52,44,55,59,74,85,163,244,60,55,70,45,25,41,35,84,218,143,106]},"/ZeroDawn/TheFrozenWilds": {"A":[16,23,30,28,29,19,110,20,26,36,19,19,25,29,15,15,10,28,8,19,139,16,22,25,12],"H":[92,29,25]}}
 var current_audio = null
 
 var focused_datapoint = null
@@ -81,7 +87,7 @@ function toggle_nav() {
 
 function set_mobile_nav_delays() {
     let arr = document.querySelectorAll("#mobile-nav > .nav-body  > .nav__link")
-    document.body.style = `--base-delay: ${250 / arr.length}ms`
+    document.body.style.setProperty(`--base-delay`, `${250 / arr.length}ms`)
     arr.forEach((ele, index)=>{
         // '250 + ...' is the time taken for the page to disappear
         ele.style.setProperty("--delay", `${250 + (index * 250 / arr.length)}ms`)
@@ -134,7 +140,7 @@ function setup_datatype_links() {
             
             datatype_choice.classList.add("datatype-selected")
             current_datatype = datatype_choice.getAttribute("target")
-            all_texts = await (await fetch(`/ZeroDawn/Texts/${current_datatype}.json`)).json()
+            all_texts = await (await fetch(`${base}/Texts/${current_datatype}.json`)).json()
             // Update the poster
             Array.from(document.getElementsByClassName("datatype-poster")).forEach(ele=>{
                 ele.src = `/ZeroDawn/Images/poster-${current_datatype.startsWith("Text")?"text":current_datatype.toLowerCase()}.png`
@@ -194,7 +200,7 @@ function prepare_datapoints() {
             datapoint.setAttribute("position", index+1)
     
             // 1. Set the audio duration
-            if(datapoint.getAttribute("media-type")) datapoint.querySelector(".ratio").textContent = `0:00 / ${getTimeStamp(audio_durations[datapoint.getAttribute("media-type")][index])}`
+            if(datapoint.getAttribute("media-type")) datapoint.querySelector(".ratio").textContent = `0:00 / ${getTimeStamp(audio_durations[base][datapoint.getAttribute("media-type")][index])}`
             
             // 2. Set onmouseover event for datapoints
             datapoint.onmouseover = event=>{
@@ -248,7 +254,7 @@ function update_progress_bar() {
     // Update the played / length text
     if(current_audio) {
         let current_timestamp = getTimeStamp(current_audio.currentTime)
-        let duration_timestamp = getTimeStamp(current_audio.duration)
+        let duration_timestamp = getTimeStamp(audio_durations[base][selected_datapoint.getAttribute("media-type")][parseInt(selected_datapoint.getAttribute("position")) - 1])
         // Apply to the default datapoint audio element
         selected_datapoint.querySelector(".ratio").textContent = `${current_timestamp} / ${duration_timestamp}`
         // Apply to the popup datapoint audio element
@@ -294,7 +300,7 @@ function stop_audio() {
 }
 
 function create_audio_elements() {
-    for(let audios of Object.values(all_audios)) {
+    for(let audios of Object.values(all_audios[base])) {
         for(let i = 0; i < audios.length; ++i) {
             let audio = document.createElement("AUDIO")
             audio.ontimeupdate = update_progress_bar
@@ -317,7 +323,7 @@ function load_audio() {
     }
     
     let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
-    current_audio = all_audios[media_type][datapoint_position-1]
+    current_audio = all_audios[base][media_type][datapoint_position-1]
     return current_audio
 }
 
@@ -377,7 +383,7 @@ function update_popup() {
         
         // Set ratio
         let current_timestamp = getTimeStamp(current_audio.currentTime)
-        let duration_timestamp = getTimeStamp(audio_durations[media_type][parseInt(selected_datapoint.getAttribute("position")) - 1])
+        let duration_timestamp = getTimeStamp(audio_durations[base][media_type][parseInt(selected_datapoint.getAttribute("position")) - 1])
         POPUP.audio.querySelector(".ratio").textContent = `${current_timestamp} / ${duration_timestamp}`
         
         // Set media type attribute
@@ -446,9 +452,9 @@ function select_datapoint() {
     }
     else {
         let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
-        current_audio = all_audios[media_type][datapoint_position-1]
-        if(!all_audios[media_type][datapoint_position-1].src) {
-            current_audio.src = `/ZeroDawn/Audio/HZD ${media_type} ${datapoint_position}.mp3`
+        current_audio = all_audios[base][media_type][datapoint_position-1]
+        if(!all_audios[base][media_type][datapoint_position-1].src) {
+            current_audio.src = `${base}/Audio/HZD ${media_type} ${datapoint_position}.mp3`
         }
     }
     // If the text hasn't been set, do it now
