@@ -435,6 +435,7 @@ section#datapoint-types {
 }
 
 #datapoint-types-inner {
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -452,21 +453,41 @@ section#datapoint-types {
     }
 }
 
-#datapoint-types-inner > .datapoint-choice {
+.datapoint-choice {
     user-select: none;
     position: relative;
     width: 100%;
     display: flex;
+    gap: 8px;
     align-items: center;
     height: 100%;
     min-height: 2.5em;
     font-size: 1em;
+    padding: 0 20px;
+}
+
+.datapoint-choice::before, .datapoint-choice::after {
+    content: '';
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.datapoint-choice::before {
+    flex: 0 0 20px;
 }
 
 @media (min-width: 1024px) {
     .datapoint-choice {
         color: var(--steel-blue);
+        gap: 0;
         height: fit-content;
+        padding: 0;
+    }
+
+    .datapoint-choice::before, .datapoint-choice::after {
+        display: none;
     }
     
     .datapoint-choice:hover {
@@ -489,13 +510,13 @@ section#datapoint-types {
 }
 
 .datapoint-choice > header {
-    width: 100%;
     line-height: 1em;
     white-space: pre-line;
 }
 
 @media (min-width: 1024px) {
     .datapoint-choice > header {
+        width: 100%;
         white-space: normal;
     }
 }
