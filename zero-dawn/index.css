@@ -36,6 +36,12 @@ nav#mobile-nav {
     overflow: hidden;
 }
 
+@media (min-width: 1024px) {
+    body {
+        height: 100vh;
+    }
+}
+
 /* Mobile Nav Header - Logo and + symbol */
 
 nav#mobile-nav > #nav-header {
@@ -69,14 +75,6 @@ nav#mobile-nav > #nav-header {
     align-items: center;
     overflow: hidden;
 }
-
-/* #logo-container {
-    width: 85%;
-}
-
-#toggle-nav {
-    width: 15%;
-} */
 
 #nav-header img {
     max-height: 90%;
