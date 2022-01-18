@@ -44,55 +44,43 @@ nav#mobile-nav > #nav-header {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
-    padding: 0 10%;
     font-size: 2em;
 }
 
-#nav-line {
-    position: relative;
+#mobile-nav > #nav-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 5px;
-}
 
-#nav-line > img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    background-image: url(/zero-dawn/images/Line-Colored.png);
+    background-position: center;
+    background-repeat: repeat-x;
 }
 
 #nav-header > * {
     height: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
     overflow: hidden;
 }
 
-#nav-header > #logo-container {
+/* #logo-container {
     width: 85%;
 }
 
-#nav-header > #logo-container > img {
+#toggle-nav {
+    width: 15%;
+} */
+
+#nav-header img {
     max-height: 90%;
     max-width: 90%;
-}
-
-#toggle-nav {
-    position: relative;
-    justify-content: center;
-    height: unset;
-    width: 15%;
-    aspect-ratio: 1 / 1;
-}
-
-#toggle-nav > img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    aspect-ratio: 1 / 1;
 }
 
 .nav-expanded #toggle-nav > img {
@@ -139,7 +127,7 @@ nav#mobile-nav > .nav-body {
 
 #mobile-nav .nav__link {
     background: var(--img-url) center/contain no-repeat;
-    filter: saturate(2);
+    filter: saturate(100%);
 }
 
 #mobile-nav .nav__link--current {
@@ -320,7 +308,7 @@ nav#mobile-nav > .nav-body {
     }
 
     #desktop-nav .nav__link--current {
-        filter: saturate(2);
+        filter: saturate(3);
         opacity: 1 !important;
     }
 
@@ -447,7 +435,6 @@ section#datapoint-types {
 }
 
 #datapoint-types-inner {
-    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -457,6 +444,7 @@ section#datapoint-types {
 
 @media (min-width: 1024px) {
     #datapoint-types-inner {
+        width: 100%;
         height: auto;
         overflow: visible;
         padding: 30px 20px;
@@ -471,6 +459,7 @@ section#datapoint-types {
     display: flex;
     align-items: center;
     height: 100%;
+    min-height: 2.5em;
     font-size: 1em;
 }
 
@@ -494,30 +483,20 @@ section#datapoint-types {
 }
 
 .datapoint-choice > img {
-    height: 2em;
+    height: 100%;
+    max-height: 2em;
     width: auto;
 }
 
 .datapoint-choice > header {
     width: 100%;
-}
-
-.datapoint-choice > header::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.25;
-    filter: invert(0.8);
-    background: url(/zero-dawn/images/IDK2.png) center/contain no-repeat;
+    line-height: 1em;
+    white-space: pre-line;
 }
 
 @media (min-width: 1024px) {
-    .datapoint-choice > header::before {
-        all: unset;
+    .datapoint-choice > header {
+        white-space: normal;
     }
 }
 
