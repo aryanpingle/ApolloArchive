@@ -128,11 +128,6 @@ nav#mobile-nav > .nav-body {
     overflow: hidden;
 }
 
-.nav__link--current {
-    /* filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%); */
-    filter: saturate(2);
-}
-
 .nav-expanded #mobile-nav .nav__link {
     opacity: 1;
     /* Delay while appearing */
@@ -148,6 +143,7 @@ nav#mobile-nav > .nav-body {
 }
 
 #mobile-nav .nav__link--current {
+    pointer-events: none;
     filter: blur(2px);
 }
 
@@ -324,6 +320,7 @@ nav#mobile-nav > .nav-body {
     }
 
     #desktop-nav .nav__link--current {
+        filter: saturate(2);
         opacity: 1 !important;
     }
 
