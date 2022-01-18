@@ -8,14 +8,14 @@
     <meta name="description" content="All datapoints and lore-related collectibles in the DLC The Frozen Wilds, with a responsive version of the in-game UI">
     <base href="/">
     <title>The Apollo Archive | Zero Dawn DLC: The Frozen Wilds</title>
-    <link rel="icon" href="/Assets/Images/favicon-16.png" sizes="16x16" type="image/png">
-    <link rel="icon" href="/Assets/Images/favicon-32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/Assets/Images/favicon-48.png" sizes="48x48" type="image/png">
-    <link rel="icon" href="/Assets/Images/favicon-62.png" sizes="62x62" type="image/png">
+    <link rel="icon" href="/assets/images/favicon-16.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/assets/images/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/assets/images/favicon-48.png" sizes="48x48" type="image/png">
+    <link rel="icon" href="/assets/images/favicon-62.png" sizes="62x62" type="image/png">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/Assets/CSS/main.css">
-    <link rel="stylesheet" href="/ZeroDawn/ZeroDawn.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/zero-dawn/index.css">
     
     <!-- JS -->
     <script>
@@ -23,8 +23,8 @@
             navigator.serviceWorker.register("/sw.js")
         }
     </script>
-    <script defer src="/Assets/JS/main.js"></script>
-    <script defer src="/ZeroDawn/ZeroDawn.js"></script>
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/zero-dawn/index.js"></script>
     <script defer>
         window.onload = () => {
             logtime(STIME, "HTML PARSING")
@@ -38,22 +38,22 @@
     </script>
 </head>
 
-<body style="background-image: url(/ZeroDawn/TheFrozenWilds/Images/Background.jpg);">
+<body style="background-image: url(/zero-dawn/the-frozen-wilds/images/Background.jpg);">
     <nav id="mobile-nav">
         <div id="nav-header">
             <div id="logo-container">
-                <img src="/Assets/Images/FrozenWildsCustomLogo2.png" alt="" />
+                <img src="/assets/images/FrozenWildsCustomLogo2.png" alt="" />
             </div>
             <div id="toggle-nav" onclick="toggle_nav()">
-                <img src="/ZeroDawn/Images/menu-icon.png" alt="">
+                <img src="/zero-dawn/images/menu-icon.png" alt="">
             </div>
         </div>
-        <div id="nav-line"><img src="/ZeroDawn/Images/Line-Colored.png" alt=""></div>
+        <div id="nav-line"><img src="/zero-dawn/images/Line-Colored.png" alt=""></div>
         <div class="nav-body">
-            <a class="nav__link" href="/" style="--img-url: url(/Assets/Images/Apollo.png)"></a>
-            <a class="nav__link" href="/ZeroDawn/" style="--img-url: url(/Assets/Images/Horizon\ ZD.png)"></a>
-            <a class="nav__link nav__link--current" href="/ZeroDawn/TheFrozenWilds/" style="--img-url: url(/Assets/Images/FrozenWildsCustomLogo2.png)"></a>
-            <a class="nav__link" href="/ForbiddenWest/" style="--img-url: url(/Assets/Images/Horizon\ FW.png)"></a>
+            <a class="nav__link" href="/" style="--img-url: url(/assets/images/Apollo.png)"></a>
+            <a class="nav__link" href="/zero-dawn/" style="--img-url: url(/assets/images/Horizon\ ZD.png)"></a>
+            <a class="nav__link nav__link--current" href="/zero-dawn/the-frozen-wilds/" style="--img-url: url(/assets/images/FrozenWildsCustomLogo2.png)"></a>
+            <a class="nav__link" href="/forbidden-west/" style="--img-url: url(/assets/images/Horizon\ FW.png)"></a>
         </div>
     </nav>
     
@@ -94,10 +94,10 @@
         <nav id="desktop-nav">
             <div class="desktop-nav__child" id="page-navigate-left" onclick="go_to_previous_page()">Q</div>
             <div class="desktop-nav__child nav-body">
-                <a class="nav__link" href="/" title="Homepage"><img src="/Assets/Images/Apollo.png" alt=""></a>
-                <a class="nav__link" href="/ZeroDawn/" title="Horizon: Zero Dawn"><img src="/Assets/Images/Horizon ZD.png" alt=""></a>
-                <a class="nav__link nav__link--current" href="/ZeroDawn/TheFrozenWilds.html" title="Zero Dawn DLC: The Frozen Wilds"><img src="/Assets/Images/FrozenWildsCustomLogo2.png" alt=""></a>
-                <a class="nav__link" href="/ForbiddenWest/" title="Horizon: Forbidden West"><img src="/Assets/Images/Horizon FW.png" alt=""></a>
+                <a class="nav__link" href="/" title="Homepage"><img src="/assets/images/Apollo.png" alt=""></a>
+                <a class="nav__link" href="/zero-dawn/" title="Horizon: Zero Dawn"><img src="/assets/images/Horizon ZD.png" alt=""></a>
+                <a class="nav__link nav__link--current" href="/zero-dawn/the-frozen-wilds/" title="Zero Dawn DLC: The Frozen Wilds"><img src="/assets/images/FrozenWildsCustomLogo2.png" alt=""></a>
+                <a class="nav__link" href="/forbidden-west/" title="Horizon: Forbidden West"><img src="/assets/images/Horizon FW.png" alt=""></a>
             </div>
             <div class="desktop-nav__child" id="page-navigate-right" onclick="go_to_next_page()">E</div>
             <div class="desktop-nav__child" id="network-status"></div>

@@ -1,16 +1,16 @@
 "use strict"
 
 const all_audios = {
-    "/ZeroDawn": {
+    "/zero-dawn": {
         "A": new Array(63).fill(null),
         "H": new Array(22).fill(null)
     },
-    "/ZeroDawn/TheFrozenWilds": {
+    "/zero-dawn/the-frozen-wilds": {
         "A": new Array(25).fill(null),
         "H": new Array(3).fill(null)
     }
 }
-var audio_durations = {"/ZeroDawn": {"A":[20,20,32,24,33,32,44,8,39,46,52,19,31,37,20,23,51,58,45,54,25,20,32,46,66,23,118,81,72,46,68,43,55,50,85,59,65,70,61,65,61,91,66,76,71,76,97,16,25,77,91,66,97,17,14,22,25,63,85,69,81,62,52],"H":[24,10,45,52,44,55,59,74,85,163,244,60,55,70,45,25,41,35,84,218,143,106]},"/ZeroDawn/TheFrozenWilds": {"A":[16,23,30,28,29,19,110,20,26,36,19,19,25,29,15,15,10,28,8,19,139,16,22,25,12],"H":[92,29,25]}}
+var audio_durations = {"/zero-dawn": {"A":[20,20,32,24,33,32,44,8,39,46,52,19,31,37,20,23,51,58,45,54,25,20,32,46,66,23,118,81,72,46,68,43,55,50,85,59,65,70,61,65,61,91,66,76,71,76,97,16,25,77,91,66,97,17,14,22,25,63,85,69,81,62,52],"H":[24,10,45,52,44,55,59,74,85,163,244,60,55,70,45,25,41,35,84,218,143,106]},"/zero-dawn/the-frozen-wilds": {"A":[16,23,30,28,29,19,110,20,26,36,19,19,25,29,15,15,10,28,8,19,139,16,22,25,12],"H":[92,29,25]}}
 var current_audio = null
 
 var focused_datapoint = null
@@ -140,10 +140,10 @@ function setup_datatype_links() {
             
             datatype_choice.classList.add("datatype-selected")
             current_datatype = datatype_choice.getAttribute("target")
-            all_texts = await (await fetch(`${base}/Texts/${current_datatype}.json`)).json()
+            all_texts = await (await fetch(`${base}/texts/${current_datatype}.json`)).json()
             // Update the poster
             Array.from(document.getElementsByClassName("datatype-poster")).forEach(ele=>{
-                ele.src = `/ZeroDawn/Images/poster-${current_datatype.startsWith("Text")?"text":current_datatype.toLowerCase()}.png`
+                ele.src = `/zero-dawn/images/poster-${current_datatype.startsWith("Text")?"text":current_datatype.toLowerCase()}.png`
             })
             // Show the container for the datatype
             document.getElementById("datatype-container").classList.add("shown")
@@ -454,7 +454,7 @@ function select_datapoint() {
         let datapoint_position = parseInt(selected_datapoint.getAttribute("position"))
         current_audio = all_audios[base][media_type][datapoint_position-1]
         if(!all_audios[base][media_type][datapoint_position-1].src) {
-            current_audio.src = `${base}/Audio/HZD ${media_type} ${datapoint_position}.mp3`
+            current_audio.src = `${base}/audio/HZD ${media_type} ${datapoint_position}.mp3`
         }
     }
     // If the text hasn't been set, do it now

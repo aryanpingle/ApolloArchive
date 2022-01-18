@@ -6,11 +6,11 @@
 ///////////////////////////////////
 
 // Document Cache is a cache of document files - html, js, css, etc
-const DOCUMENT_VERSION = 4.60
+const DOCUMENT_VERSION = 4.70
 const DOCUMENT_CACHE_NAME = `DOCv${DOCUMENT_VERSION.toFixed(2)}`
 var DOCUMENT_CACHE = null
 // Resource Cache is a cache of almost always static resources - images, fonts, and everything in the Texts folder
-const RESOURCE_VERSION = 4.60
+const RESOURCE_VERSION = 4.70
 const RESOURCE_CACHE_NAME = `RESv${RESOURCE_VERSION.toFixed(2)}`
 var RESOURCE_CACHE = null
 
@@ -121,7 +121,7 @@ async function get_request(request_event) {
         }
     }
     // Check if the request is for a resource
-    else if(url.containsAny([".json", "Fonts/", "Images/", "fonts.googleapis.com"])) {
+    else if(url.containsAny([".json", "fonts/", "images/", "fonts.googleapis.com"])) {
         // Perform a cache request
         let match = await RESOURCE_CACHE.match(request, { ignoreVary: true })
         if (match != undefined && match != null) return match

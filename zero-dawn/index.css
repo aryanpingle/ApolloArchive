@@ -11,7 +11,7 @@
 }
 
 * {
-    cursor: url(./Images/Cursor.png), auto;
+    cursor: url(/zero-dawn/images/Cursor.png), auto;
 }
 
 body {
@@ -21,7 +21,7 @@ body {
     position: relative;
     background-color: black;
 
-    background-image: url(./Images/Background.jpg);
+    background-image: url(/zero-dawn/images/Background.jpg);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -238,7 +238,7 @@ nav#mobile-nav > .nav-body {
         left: 1em;
         height: 40%;
         aspect-ratio: 1 / 1;
-        background: url(/ZeroDawn/Images/offline.png) 0/contain no-repeat;
+        background: url(/zero-dawn/images/offline.png) 0/contain no-repeat;
         opacity: 0;
         transition: opacity 250ms ease;
         z-index: 1;
@@ -372,11 +372,11 @@ nav#mobile-nav > .nav-body {
 
 /* Originally in Datapoints.css */
 
-img.collectibles-icon {content: url(./Images/datapoint-icon-collectibles.png);}
-img.audio-icon {content: url(./Images/datapoint-icon-audio.png);}
-img.hologram-icon {content: url(./Images/datapoint-icon-hologram.png);}
-img.text-icon {content: url(./Images/datapoint-icon-text.png);}
-img.scanned-glyphs-icon {content: url(./Images/datapoint-icon-scanned-glyphs.png);}
+img.collectibles-icon {content: url(/zero-dawn/images/datapoint-icon-collectibles.png);}
+img.audio-icon {content: url(/zero-dawn/images/datapoint-icon-audio.png);}
+img.hologram-icon {content: url(/zero-dawn/images/datapoint-icon-hologram.png);}
+img.text-icon {content: url(/zero-dawn/images/datapoint-icon-text.png);}
+img.scanned-glyphs-icon {content: url(/zero-dawn/images/datapoint-icon-scanned-glyphs.png);}
 
 #page-content {
     width: 100vw;
@@ -512,7 +512,7 @@ section#datapoint-types {
     height: 100%;
     opacity: 0.25;
     filter: invert(0.8);
-    background: url(./Images/IDK2.png) center/contain no-repeat;
+    background: url(/zero-dawn/images/IDK2.png) center/contain no-repeat;
 }
 
 @media (min-width: 1024px) {
@@ -525,7 +525,7 @@ section#datapoint-types {
 
 @media (min-width: 1024px) {
     section#datatype-container {
-        background: url(/ZeroDawn/Images/Machines.png) center / contain no-repeat;
+        background: url(/zero-dawn/images/Machines.png) center / contain no-repeat;
         pointer-events: none;
         flex: 20 0 0;
         /* width: fit-content; */
@@ -597,7 +597,7 @@ section.datatype.shown {
         left: 0;
         width: 100%;
         height: 15px;
-        background-image: url(./Images/scrollbar-horizontal.png);
+        background-image: url(/zero-dawn/images/scrollbar-horizontal.png);
         background-position: 0 center;
         background-size: 100% cover;
         background-repeat: no-repeat;
@@ -607,7 +607,7 @@ section.datatype.shown {
 /* This is the close-datatype-section button */
 
 .datatype-title > img {
-    content: url(./Images/Plus.png);
+    content: url(/zero-dawn/images/Plus.png);
     transform: rotate(45deg);
     position: absolute;
     top: 0;
@@ -651,18 +651,18 @@ section.datatype.shown {
 @media (min-width: 1024px) {
     .datapoint-container-outer::-webkit-scrollbar {
         width: 8px;
-        background: url(./Images/scrollbar-vertical.png) center/cover no-repeat;
+        background: url(/zero-dawn/images/scrollbar-vertical.png) center/cover no-repeat;
     }
     
     .datapoint-container-outer::-webkit-scrollbar-thumb {
-        background: url(./Images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
+        background: url(/zero-dawn/images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
     }
 }
 
 .datapoint-container {
     --shift: 0;
     --columns: 1;
-    margin: auto;
+    margin: 0 auto;
     height: fit-content;
     width: calc(100% - 20px);
     
@@ -801,7 +801,7 @@ section.datatype.shown {
     height: 20px;
     width: 100%;
     
-    background: url(./Images/scrollbar-horizontal.png) center/100% no-repeat;
+    background: url(/zero-dawn/images/scrollbar-horizontal.png) center/100% no-repeat;
 }
 
 .datapoint-audio::before {
@@ -819,11 +819,11 @@ section.datatype.shown {
     height: 2em;
     aspect-ratio: 1 / 1;
     
-    background: url(./Images/play-button.png) center/cover no-repeat;
+    background: url(/zero-dawn/images/play-button.png) center/cover no-repeat;
 }
 
 .playing .play-button {
-    background-image: url(./Images/pause-button.png);
+    background-image: url(/zero-dawn/images/pause-button.png);
 }
 
 .datapoint-audio > .progress-bar {
@@ -908,7 +908,7 @@ section#desktop-sidebar {
         aspect-ratio: 528 / 94;
         padding-left: 40px;
         color: white;
-        background: url(./Images/datapoint-title-brushed-background.png) 0/contain no-repeat;
+        background: url(/zero-dawn/images/datapoint-title-brushed-background.png) 0/contain no-repeat;
     }
     
     #desktop-sidebar > div {
@@ -953,7 +953,7 @@ section#desktop-sidebar {
         width: 100%;
         height: 100%;
         
-        background: url(./Images/DatapointBackground-Transparent.png) 0/cover;
+        background: url(/zero-dawn/images/DatapointBackground-Transparent.png) 0/cover;
         opacity: 0.65;
     }
     
@@ -968,10 +968,10 @@ section#desktop-sidebar {
         background: center/cover no-repeat;
     }
 
-    .classic-layout #Audio .datapoint::after {background-image: url(./Images/datapoint-icon-audio.png);}
-    .classic-layout #Hologram .datapoint::after {background-image: url(./Images/datapoint-icon-hologram.png);}
-    .classic-layout :is(#Text-Quest, #Text-World, #Text-Machines) .datapoint::after {background-image: url(./Images/datapoint-icon-text.png);}
-    .classic-layout #Scanned-Glyphs .datapoint::after {background-image: url(./Images/datapoint-icon-scanned-glyphs.png);}
+    .classic-layout #Audio .datapoint::after {background-image: url(/zero-dawn/images/datapoint-icon-audio.png);}
+    .classic-layout #Hologram .datapoint::after {background-image: url(/zero-dawn/images/datapoint-icon-hologram.png);}
+    .classic-layout :is(#Text-Quest, #Text-World, #Text-Machines) .datapoint::after {background-image: url(/zero-dawn/images/datapoint-icon-text.png);}
+    .classic-layout #Scanned-Glyphs .datapoint::after {background-image: url(/zero-dawn/images/datapoint-icon-scanned-glyphs.png);}
 
     .classic-layout .datapoint.focused::after {
         filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(5198%) hue-rotate(330deg) brightness(107%) contrast(101%);
@@ -1036,7 +1036,7 @@ section#desktop-sidebar {
         font-size: 3em;
         aspect-ratio: 528 / 94;
         color: white;
-        background: url(./Images/datapoint-title-brushed-background.png) 0/contain no-repeat;
+        background: url(/zero-dawn/images/datapoint-title-brushed-background.png) 0/contain no-repeat;
         text-align: center;
         padding: 0;
     }
@@ -1068,11 +1068,11 @@ section#desktop-sidebar {
     
     #popup-text::-webkit-scrollbar {
         width: 8px;
-        background: url(./Images/scrollbar-vertical.png) center/cover no-repeat;
+        background: url(/zero-dawn/images/scrollbar-vertical.png) center/cover no-repeat;
     }
     
     #popup-text::-webkit-scrollbar-thumb {
-        background: url(./Images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
+        background: url(/zero-dawn/images/scrollbar-thumb-vertical.png) center/100% 100% no-repeat;
     }
     
     #popup-main > #poster-img {
