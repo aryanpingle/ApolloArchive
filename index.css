@@ -75,6 +75,7 @@ body {
 }
 
 #apollo-logo {
+    display: block;
     border: 3px solid var(--classic-blue);
     aspect-ratio: 1 / 1;
     border-radius: 999px;
