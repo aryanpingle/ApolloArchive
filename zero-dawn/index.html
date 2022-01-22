@@ -17,6 +17,16 @@
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/zero-dawn/index.css">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SWXMZEH7DD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-SWXMZEH7DD');
+    </script>
+
     <!-- JS -->
     <script>
         if("serviceWorker" in navigator) {
@@ -42,7 +52,7 @@
     <nav id="mobile-nav">
         <div id="nav-header">
             <div id="logo-container">
-                <img src="/assets/images/Horizon ZD.png" alt="" />
+                <img src="/assets/images/ZeroDawn-Logo.png" alt="" />
             </div>
             <div id="toggle-nav" onclick="toggle_nav()">
                 <img src="/zero-dawn/images/menu-icon.png" alt="">
@@ -50,9 +60,9 @@
         </div>
         <div class="nav-body">
             <a class="nav__link" href="/" style="--img-url: url(/assets/images/Apollo.png)"></a>
-            <a class="nav__link nav__link--current" href="/zero-dawn/" style="--img-url: url(/assets/images/Horizon\ ZD.png)"></a>
-            <a class="nav__link" href="/zero-dawn/the-frozen-wilds/" style="--img-url: url(/assets/images/FrozenWildsCustomLogo2.png)"></a>
-            <a class="nav__link" href="/forbidden-west/" style="--img-url: url(/assets/images/Horizon\ FW.png)"></a>
+            <a class="nav__link nav__link--current" href="/zero-dawn/" style="--img-url: url(/assets/images/ZeroDawn-Logo.png)"></a>
+            <a class="nav__link" href="/zero-dawn/the-frozen-wilds/" style="--img-url: url(/assets/images/TheFrozenWilds-Logo.png)"></a>
+            <a class="nav__link" href="/forbidden-west/" style="--img-url: url(/assets/images/ForbiddenWest-Logo.png)"></a>
         </div>
     </nav>
 
@@ -94,9 +104,9 @@
             <div class="desktop-nav__child" id="page-navigate-left" onclick="go_to_previous_page()">Q</div>
             <div class="desktop-nav__child nav-body">
                 <a class="nav__link" href="/" title="Homepage"><img src="/assets/images/Apollo.png" alt=""></a>
-                <a class="nav__link nav__link--current" href="/zero-dawn/" title="Horizon: Zero Dawn"><img src="/assets/images/Horizon ZD.png" alt=""></a>
-                <a class="nav__link" href="/zero-dawn/the-frozen-wilds/" title="Zero Dawn DLC: The Frozen Wilds"><img src="/assets/images/FrozenWildsCustomLogo2.png" alt=""></a>
-                <a class="nav__link" href="/forbidden-west/" title="Horizon: Forbidden West"><img src="/assets/images/Horizon FW.png" alt=""></a>
+                <a class="nav__link nav__link--current" href="/zero-dawn/" title="Horizon: Zero Dawn"><img src="/assets/images/ZeroDawn-Logo.png" alt=""></a>
+                <a class="nav__link" href="/zero-dawn/the-frozen-wilds/" title="Zero Dawn DLC: The Frozen Wilds"><img src="/assets/images/TheFrozenWilds-Logo.png" alt=""></a>
+                <a class="nav__link" href="/forbidden-west/" title="Horizon: Forbidden West"><img src="/assets/images/ForbiddenWest-Logo.png" alt=""></a>
             </div>
             <div class="desktop-nav__child" id="page-navigate-right" onclick="go_to_next_page()">E</div>
             <div class="desktop-nav__child" id="network-status"></div>

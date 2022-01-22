@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+@font-face {
+    font-family: 'Horizon';
+    src: url(/assets/fonts/Horizon.woff2) format('woff2');
+    font-display: swap;
+}
+
+:root {
+    --light-blue: hsl(197, 55%, 85%);
+    --classic-blue: hsl(197, 89%, 67%);
+    --dark-blue: hsl(197, 54%, 50%);
+    --cursive-font: 'Satisfy', cursive;
+
+    font-family: 'Oswald';
+}
+
+a, a:focus, a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Actual */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100vh;
+    height: fill-available;
+    height: -moz-fill-available;
+    height: -webkit-fill-available;
+}
+
+body {
+    background-color: #121212;
+    color: white;
+}
+
+#page {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+}
+
+@media (min-width: 720px) {
+    #page::-webkit-scrollbar {
+        background-color: transparent;
+        width: 8px;
+    }
+
+    #page::-webkit-scrollbar-thumb {
+        background-color: var(--classic-blue);
+        border-top-left-radius: 999px;
+        border-bottom-left-radius: 999px;
+    }
+}
+
+#page > nav {
+    width: 100%;
+    height: 15%;
+    /* background-color: orange; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+    overflow: hidden;
+}
+
+.nav__item {
+    height: 75%;
+}
+
+#apollo-logo {
+    border: 3px solid var(--classic-blue);
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+
+    background: url(/assets/images/favicon.png) no-repeat;
+    background-size: 75%;
+    background-position: center;
+
+    margin-right: auto;
+    transition: transform 250ms ease;
+}
+
+#apollo-logo:hover {
+    transform: rotate(-90deg);
+}
+
+.nav__item:not(#apollo-logo) {
+    display: none;
+}
+
+@media (min-width: 720px) {
+    #page > nav {
+        padding: 0 5vw;
+    }
+
+    .nav__item {
+        position: relative;
+        margin-right: 1em;
+        font-size: 2em;
+        text-transform: uppercase;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav__item:not(:last-child):not(#apollo-logo)::after {
+        content: '';
+        position: absolute;
+        right: -0.5em;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 2px;
+        height: 1em;
+        background-color: rgba(255, 255, 255, 0.25);
+    }
+}
+
+/* Hero Section */
+
+#section-hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 360p --> 80px */
+    /* 720p --> 128px */
+    font-size: calc(2em + 3 * 16 * ( 100vw / 360));
+    text-transform: uppercase;
+    font-weight: 900;
+    color: var(--light-blue);
+    padding: 0.5em 0;
+    line-height: 1em;
+}
+
+@media (min-width: 720px) {
+    #section-hero {
+        height: 85%;
+        /* 720p --> 128px */
+        /* 1080p --> 192px */
+        font-size: calc(96px + 32 * ((100vw + 0px) / 480));
+    }
+}
+
+/* About Section */
+
+#section-about {
+    position: relative;
+    font-size: 1.5em;
+    padding: 1em 0.5em;
+    overflow: hidden;
+    font-weight: 100;
+}
+
+#section-about::before, #section-about::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 1px;
+    width: 50%;
+    opacity: 0.5;
+    background: radial-gradient(var(--classic-blue), transparent);
+}
+
+#section-about::after {
+    top: unset;
+    bottom: 0;
+}
+
+#section-about > header {
+    word-wrap: break-word;
+}
+
+code {
+    color: var(--light-blue);
+    line-height: 50%;
+}
+
+@media (min-width: 720px) {
+    #section-about {
+        font-size: 3em;
+        padding: 1em 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #section-about > header {
+        padding: 0.5em 0;
+        width: 60%;
+    }
+
+    #section-about > header:last-child {
+        font-size: 0.5em;
+    }
+}
+
+/* Database Section */
+
+#section-database {
+    /* background-color: orange; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0;
+    gap: 100px;
+}
+
+.game {
+    display: block;
+    position: relative;
+    font-size: 5em;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.game__title {
+    z-index: 999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    aspect-ratio: 16 / 9;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.game__showcase {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    width: 90%;
+    aspect-ratio: 16 / 9;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    opacity: 0.5;
+    filter: contrast(1.5) saturate(2);
+}
+
+@media (min-width: 1024px) {
+    #section-database {
+        padding: 50px;
+        gap: 50px;
+    }
+
+    .game {
+        width: 80%;
+        aspect-ratio: 30 / 9;
+    }
+
+    .game__title {
+        width: 50%;
+        inset: 0;
+        margin: auto;
+        transform: translateX(-25%);
+
+        transition: 250ms ease;
+        transition-property: opacity, transform;
+    }
+
+    .game:hover .game__title {
+        transform: translateX(-30%);
+    }
+
+    .game__showcase {
+        width: 50%;
+        inset: 0;
+        margin: auto;
+        transform: translateX(25%);
+
+        transition: 250ms ease;
+        transition-property: opacity, transform;
+    }
+
+    .game:hover .game__showcase {
+        opacity: 1;
+        transform: translateX(30%);
+    }
+}
+
+/* Credits Section */
+
+#section-credits {
+    position: relative;
+    font-size: 1.75em;
+    padding: 1.5em 0.5em;
+    overflow: hidden;
+    font-weight: 100;
+}
+
+#section-credits::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 1px;
+    width: 50%;
+    opacity: 0.5;
+    background: radial-gradient(var(--classic-blue), transparent);
+}
+
+#credits {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.credit {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+.credit__role {
+    color: var(--classic-blue);
+    font-size: 0.75em;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.credit__name {
+    font-size: 1.5em;
+    line-height: 100%;
+}
+
+@media (min-width: 720px) {
+    #section-credits {
+        font-size: 1.75em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #credits {
+        width: 80%;
+        gap: 0.5em;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .credit {
+        height: 100%;
+        align-items: center;
+        margin: 0;
+        text-align: center;
+    }
+
+    .credit__role {
+        font-size: 0.75em;
+    }
+    
+    .credit__name {
+        font-size: 1.5em;
+    }
+}
+
+@media (min-width: 1024px) {
+    #section-credits {
+        font-size: 2em;
+    }
+}
+
+/* FAQ Section */
+
+#section-faq {
+    position: relative;
+    font-size: 1.5em;
+    padding: 1.5em 0.5em;
+    overflow: hidden;
+    font-weight: 100;
+}
+
+#section-faq::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 1px;
+    width: 50%;
+    opacity: 0.5;
+    background: radial-gradient(var(--classic-blue), transparent);
+}
+
+.faq__question {
+    color: var(--dark-blue);
+    font-size: 0.75em;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.faq__answer {
+    font-size: 1.2em;
+    line-height: 100%;
+    margin-bottom: 1em;
+}
+
+.faq__disclaimer {
+    font-size: 0.75em;
+    text-align: center;
+}
+
+@media (min-width: 1024px) {
+    #section-faq {
+        font-size: 1.75em;
+        padding: 2em 5em;
+    }
+}
