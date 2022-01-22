@@ -343,6 +343,11 @@ code {
 .credit__name {
     font-size: 1.5em;
     line-height: 100%;
+    transition: color 250ms ease;
+}
+
+.credit__name:hover {
+    color: var(--light-blue);
 }
 
 @media (min-width: 720px) {
