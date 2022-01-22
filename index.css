@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
 @font-face {
     font-family: 'Horizon';
@@ -11,7 +10,6 @@
     --light-blue: hsl(197, 55%, 85%);
     --classic-blue: hsl(197, 89%, 67%);
     --dark-blue: hsl(197, 54%, 50%);
-    --cursive-font: 'Satisfy', cursive;
 
     font-family: 'Oswald';
 }
