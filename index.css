@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 
-@font-face {
-    font-family: 'Horizon';
-    src: url(/assets/fonts/Horizon.woff2) format('woff2');
-    font-display: swap;
-}
-
 :root {
     --light-blue: hsl(197, 55%, 85%);
     --classic-blue: hsl(197, 89%, 67%);
