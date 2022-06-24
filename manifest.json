@@ -1,0 +1,53 @@
+{
+	"short_name": "Apollo Archive",
+	"name": "Apollo Archive",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#121212",
+	"theme_color": "#121212",
+	"description": "A database of all lore-related collectibles in the 'Horizon' video game franchise - in Horizon: Zero Dawn, and the DLC Horizon: The Frozen Wilds\n\nWorks Offline • Skeumorphic desktop UI that mirrors the in-game menu • (NEW) Supports The Frozen Wilds DLC",
+	"icons": [
+		{
+			"src": "/assets/images/favicon-opaque.png",
+			"type": "image/png",
+			"sizes": "660x660",
+			"purpose": "any"
+		},
+		{
+			"src": "/assets/images/favicon-opaque.png",
+			"type": "image/png",
+			"sizes": "660x660",
+			"purpose": "maskable"
+		}
+	],
+	"screenshots": [
+		{
+			"src": "/assets/images/screenshots/home.png",
+			"type": "image/png",
+			"sizes": "562x1218",
+			"platform": "android",
+			"label": "Description"
+		},
+		{
+			"src": "/assets/images/screenshots/horizon.png",
+			"type": "image/png",
+			"sizes": "562x1218",
+			"platform": "android",
+			"label": "Description"
+		},
+		{
+			"src": "/assets/images/screenshots/hbd-isaac.png",
+			"type": "image/png",
+			"sizes": "562x1218",
+			"platform": "android",
+			"label": "Description"
+		},
+		{
+			"src": "/assets/images/screenshots/horizon-dlc.png",
+			"type": "image/png",
+			"sizes": "562x1218",
+			"platform": "android",
+			"label": "Description"
+		}
+	]
+}

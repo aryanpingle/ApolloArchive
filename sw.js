@@ -5,13 +5,13 @@
 //       Suck it WorkboxJS       //
 ///////////////////////////////////
 
-const APP_VERSION = 6.00
+const APP_VERSION = 6.10
 
 // Document Cache is a cache of document files - html, js, css, etc
 const DOCUMENT_CACHE_NAME = `DOC`
 var DOCUMENT_CACHE = null
 // Resource Cache is a cache of almost always static resources - images, fonts, and everything in the Texts folder
-const RESOURCE_VERSION = 6.00
+const RESOURCE_VERSION = 6.10
 const RESOURCE_CACHE_NAME = `RESv${RESOURCE_VERSION.toFixed(2)}`
 var RESOURCE_CACHE = null
 
@@ -21,9 +21,9 @@ String.prototype.containsAny = function (substrings=[]) {
 }
 
 // For Debugging
-STOP_CACHING = self.registration.scope.includes("127.0.0.1")
-var log = (text, color="white") => console.log(`%c${text}`, `color: black; background-color: ${color};`)
-log = e => e // Comment for testing
+IS_TESTING = self.registration.scope.includes("127.0.0.1")
+STOP_CACHING = IS_TESTING
+var log = (text, color="white") => IS_TESTING ? console.log(`%c${text}`, `color: black; background-color: ${color};`) : 0
 
 self.addEventListener("install", event => {
     event.waitUntil((async () => {
